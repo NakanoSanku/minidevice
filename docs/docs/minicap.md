@@ -1,0 +1,1 @@
+::: minidevice.minicap

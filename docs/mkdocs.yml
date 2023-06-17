@@ -1,0 +1,21 @@
+site_name: "Minidevice"
+
+theme:
+  name: "material"
+
+nav:
+- Home: index.md
+- Documents:
+    - adb: adb.md
+    - images: images.md
+    - screencap: screencap.md
+    - minicap: minicap.md
+    - touch: touch.md
+    - minitouch: minitouch.md
+
+plugins:
+- search
+- mkdocstrings:
+    handlers:
+      python:
+       paths: [..] 
