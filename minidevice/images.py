@@ -90,7 +90,7 @@ class Colors:
                     "rgb+": 加权rgb欧拉距离匹配(LAB Delta E)。
                     "hs": hs欧拉距离匹配。hs为HSV空间的色调值。
         - Returns:
-            (两个颜色是否相似) bool: 
+            (两个颜色是否相似) bool:
         """
         # 差值匹配算法
         if algorithm == "diff":
@@ -135,7 +135,7 @@ class Colors:
             color_str (str): "#112233"
 
         Returns:
-            16进制颜色值 (int): 
+            16进制颜色值 (int):
         """
         color_str = color_str.strip("#")  # 移除字符串开头的 "#"
         red = int(color_str[0:2], 16)  # 提取红色分量并转换为整数
@@ -253,7 +253,7 @@ def raw2opencv(raw):
         raw (byte): raw
 
     Returns:
-        opencv格式图像 (np.array): 
+        opencv格式图像 (np.array):
     """
     return cv2.imdecode(np.frombuffer(raw, dtype=np.uint8), cv2.IMREAD_COLOR)
 
@@ -270,9 +270,9 @@ class Images:
                 - cv2.IMREAD_GRAYSCALE
 
         Returns:
-            opencv格式图像 (np.array): 
+            opencv格式图像 (np.array):
         """
-        return cv2.imread(path, flags=flag)
+        return cv2.imdecode(np.fromfile(path, dtype=np.uint8), flag)
 
     def load(path):
         """
@@ -282,7 +282,7 @@ class Images:
             path (str): 图像路径
 
         Returns:
-            opencv格式图像 (np.array): 
+            opencv格式图像 (np.array):
         """
 
         # 下载图片数据
@@ -309,7 +309,7 @@ class Images:
             path (str): 路径
             img (mat): opencv格式图像 默认保存到当前路径下save.png
         """
-        cv2.imwrite(path, img)
+        cv2.imencode(ext=".jpg", img=img)[1].tofile(path)
 
     def pixel(img, x, y):
         """
@@ -321,7 +321,7 @@ class Images:
             y (int): 纵坐标
 
         Returns:
-            坐标颜色值 (str): 
+            坐标颜色值 (str):
         """
         b, g, r = img[y, x]
         return "#{:02x}{:02x}{:02x}".format(r, g, b)
@@ -337,8 +337,8 @@ class Images:
             threshold (int, optional): 颜色相似度. Defaults to 4.
 
         Returns:
-            x (int): 
-            y (int): 
+            x (int):
+            y (int):
         """
         x_min, y_min, x_max, y_max = region or (0, 0, img.shape[1], img.shape[0])
         img = img[y_min:y_max, x_min:x_max]
@@ -395,7 +395,7 @@ class Images:
         Returns:
             x (int): 第一个点的横坐标
             y (int): 第一个点的纵坐标
-            
+
         """
         first_color_points = Images.find_all_color(
             img, first_color, region=region, threshold=threshold
@@ -491,8 +491,8 @@ class Images:
             ValueError: "Invalid feature detection method"
 
         Returns:
-            特征点 (keypoints): 
-            描述值 (descriptors): 
+            特征点 (keypoints):
+            描述值 (descriptors):
         """
         # 转换为灰度图像
         if grayscale:
