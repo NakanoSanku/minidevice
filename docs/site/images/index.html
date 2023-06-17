@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../adb/">
+        <link rel="prev" href="..">
       
       
         <link rel="next" href="../screencap/">
@@ -221,20 +221,6 @@
           Documents
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../adb/" class="md-nav__link">
-        adb
-      </a>
-    </li>
-  
-
-            
           
             
               
@@ -459,36 +445,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../minicap/" class="md-nav__link">
-        minicap
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../touch/" class="md-nav__link">
         touch
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../minitouch/" class="md-nav__link">
-        minitouch
       </a>
     </li>
   
@@ -895,7 +853,7 @@
 <span class="sd">            color (int): 0xFF112233</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: 返回颜色值的字符串，格式为 &quot;#AARRGGBB&quot;。</span>
+<span class="sd">            颜色值的字符串 (str): 格式为 &quot;#AARRGGBB&quot;。</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 将整数RGB颜色值转换为16进制字符串</span>
         <span class="n">hex_color</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">color</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
@@ -911,7 +869,7 @@
 <span class="sd">            color (int): 0xFF112233</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: 返回颜色color的R通道的值,范围0~255.</span>
+<span class="sd">            颜色color的R通道的值 (int): 范围0~255.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 右移24位获取红色通道的值</span>
         <span class="n">red</span> <span class="o">=</span> <span class="p">(</span><span class="n">color</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
@@ -925,7 +883,7 @@
 <span class="sd">            color (int): 0xFF112233</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: 颜色color的g通道的值,范围0~255.</span>
+<span class="sd">            颜色color的g通道的值 (int): 范围0~255.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 右移24位获取绿色通道的值</span>
         <span class="n">green</span> <span class="o">=</span> <span class="p">(</span><span class="n">color</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
@@ -939,7 +897,7 @@
 <span class="sd">            color (int): 0xFF112233</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: 颜色color的b通道的值,范围0~255.</span>
+<span class="sd">            颜色color的b通道的值 (int): 范围0~255.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 右移24位获取蓝色通道的值</span>
         <span class="n">blue</span> <span class="o">=</span> <span class="p">(</span><span class="n">color</span> <span class="o">&gt;&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
@@ -959,7 +917,7 @@
 <span class="sd">                    &quot;rgb+&quot;: 加权rgb欧拉距离匹配(LAB Delta E)。</span>
 <span class="sd">                    &quot;hs&quot;: hs欧拉距离匹配。hs为HSV空间的色调值。</span>
 <span class="sd">        - Returns:</span>
-<span class="sd">            bool: 返回两个颜色是否相似</span>
+<span class="sd">            (两个颜色是否相似) bool: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 差值匹配算法</span>
         <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;diff&quot;</span><span class="p">:</span>
@@ -1004,7 +962,7 @@
 <span class="sd">            color_str (str): &quot;#112233&quot;</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: 16进制颜色值</span>
+<span class="sd">            16进制颜色值 (int): </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">color_str</span> <span class="o">=</span> <span class="n">color_str</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>  <span class="c1"># 移除字符串开头的 &quot;#&quot;</span>
         <span class="n">red</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">color_str</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 提取红色分量并转换为整数</span>
@@ -1079,11 +1037,12 @@
     </thead>
     <tbody>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>颜色color的b通道的值</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>颜色color的b通道的值,范围0~255.</p>
+              <p>范围0~255.</p>
             </div>
           </td>
         </tr>
@@ -1112,7 +1071,7 @@
 <span class="sd">        color (int): 0xFF112233</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: 颜色color的b通道的值,范围0~255.</span>
+<span class="sd">        颜色color的b通道的值 (int): 范围0~255.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 右移24位获取蓝色通道的值</span>
     <span class="n">blue</span> <span class="o">=</span> <span class="p">(</span><span class="n">color</span> <span class="o">&gt;&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
@@ -1175,11 +1134,12 @@
     </thead>
     <tbody>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>颜色color的g通道的值</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>颜色color的g通道的值,范围0~255.</p>
+              <p>范围0~255.</p>
             </div>
           </td>
         </tr>
@@ -1208,7 +1168,7 @@
 <span class="sd">        color (int): 0xFF112233</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: 颜色color的g通道的值,范围0~255.</span>
+<span class="sd">        颜色color的g通道的值 (int): 范围0~255.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 右移24位获取绿色通道的值</span>
     <span class="n">green</span> <span class="o">=</span> <span class="p">(</span><span class="n">color</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
@@ -1271,11 +1231,12 @@
     </thead>
     <tbody>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>颜色color的R通道的值</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>返回颜色color的R通道的值,范围0~255.</p>
+              <p>范围0~255.</p>
             </div>
           </td>
         </tr>
@@ -1304,7 +1265,7 @@
 <span class="sd">        color (int): 0xFF112233</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: 返回颜色color的R通道的值,范围0~255.</span>
+<span class="sd">        颜色color的R通道的值 (int): 范围0~255.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 右移24位获取红色通道的值</span>
     <span class="n">red</span> <span class="o">=</span> <span class="p">(</span><span class="n">color</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
@@ -1405,7 +1366,7 @@ algorithm包括:
   </table>
       <ul>
 <li>Returns:
-    bool: 返回两个颜色是否相似</li>
+    (两个颜色是否相似) bool:</li>
 </ul>
 
       <details class="quote">
@@ -1473,7 +1434,7 @@ algorithm包括:
 <span class="sd">                &quot;rgb+&quot;: 加权rgb欧拉距离匹配(LAB Delta E)。</span>
 <span class="sd">                &quot;hs&quot;: hs欧拉距离匹配。hs为HSV空间的色调值。</span>
 <span class="sd">    - Returns:</span>
-<span class="sd">        bool: 返回两个颜色是否相似</span>
+<span class="sd">        (两个颜色是否相似) bool: </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 差值匹配算法</span>
     <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;diff&quot;</span><span class="p">:</span>
@@ -1567,11 +1528,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>16进制颜色值</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>16进制颜色值</p>
+              
             </div>
           </td>
         </tr>
@@ -1603,7 +1565,7 @@ algorithm包括:
 <span class="sd">        color_str (str): &quot;#112233&quot;</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: 16进制颜色值</span>
+<span class="sd">        16进制颜色值 (int): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">color_str</span> <span class="o">=</span> <span class="n">color_str</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>  <span class="c1"># 移除字符串开头的 &quot;#&quot;</span>
     <span class="n">red</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">color_str</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 提取红色分量并转换为整数</span>
@@ -1669,11 +1631,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+<td><code>颜色值的字符串</code></td>          <td>
+                <code>str</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>返回颜色值的字符串，格式为 "#AARRGGBB"。</p>
+              <p>格式为 "#AARRGGBB"。</p>
             </div>
           </td>
         </tr>
@@ -1704,7 +1667,7 @@ algorithm包括:
 <span class="sd">        color (int): 0xFF112233</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: 返回颜色值的字符串，格式为 &quot;#AARRGGBB&quot;。</span>
+<span class="sd">        颜色值的字符串 (str): 格式为 &quot;#AARRGGBB&quot;。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 将整数RGB颜色值转换为16进制字符串</span>
     <span class="n">hex_color</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">color</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
@@ -2103,7 +2066,7 @@ algorithm包括:
 <span class="sd">                - cv2.IMREAD_GRAYSCALE</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            mat: opencv格式图像</span>
+<span class="sd">            opencv格式图像 (np.array): </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flag</span><span class="p">)</span>
 
@@ -2115,7 +2078,7 @@ algorithm包括:
 <span class="sd">            path (str): 图像路径</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            mat: opencv格式图像</span>
+<span class="sd">            opencv格式图像 (np.array): </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># 下载图片数据</span>
@@ -2154,7 +2117,7 @@ algorithm包括:
 <span class="sd">            y (int): 纵坐标</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: 返回坐标颜色值</span>
+<span class="sd">            坐标颜色值 (str): </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
         <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">{:02x}{:02x}{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
@@ -2170,8 +2133,8 @@ algorithm包括:
 <span class="sd">            threshold (int, optional): 颜色相似度. Defaults to 4.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: x</span>
-<span class="sd">            int: y</span>
+<span class="sd">            x (int): </span>
+<span class="sd">            y (int): </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">,</span> <span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">]</span>
@@ -2196,7 +2159,7 @@ algorithm包括:
 <span class="sd">            threshold (int, optional): 颜色相似度. Defaults to 4.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list: 颜色值所有点[(x,y),(x,y),(x,y)]</span>
+<span class="sd">            颜色值所有点 (list): [(x,y),(x,y),(x,y)]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">,</span> <span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">]</span>
@@ -2226,9 +2189,9 @@ algorithm包括:
 <span class="sd">            threshold (int, optional): 相似度. Defaults to 4.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            int: x</span>
-<span class="sd">            int: y</span>
-<span class="sd">            第一个点的坐标</span>
+<span class="sd">            x (int): 第一个点的横坐标</span>
+<span class="sd">            y (int): 第一个点的纵坐标</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">first_color_points</span> <span class="o">=</span> <span class="n">Images</span><span class="o">.</span><span class="n">find_all_color</span><span class="p">(</span>
             <span class="n">img</span><span class="p">,</span> <span class="n">first_color</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span>
@@ -2254,11 +2217,11 @@ algorithm包括:
 <span class="sd">            img (mat): opencv格式图像</span>
 <span class="sd">            template (mat): opencv格式图像</span>
 <span class="sd">            threshold (float, optional): 匹配度. Defaults to 0.8.</span>
-<span class="sd">            region (list, optional): 范围[]. Defaults to None. 像素数量与查找效率几乎成正比</span>
+<span class="sd">            region (list, optional): 范围[xmin,ymin,xmax,ymax]. Defaults to None. 像素数量与查找效率几乎成正比</span>
 <span class="sd">            level (int, optional): 图像金字塔等级. Defaults to 3. 全屏1080x2400查找情况下level3效率是level2的5倍,是level1的10倍,分辨率越低提升越不明显</span>
 <span class="sd">            debug (bool,optional): 调试模式(方框绘制并显示) Defaults to False.</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            max_loc: (x,y)</span>
+<span class="sd">            max_loc (list): xmin,ymin,xmax,ymax</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 设置查找区域</span>
         <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -2324,8 +2287,8 @@ algorithm包括:
 <span class="sd">            ValueError: &quot;Invalid feature detection method&quot;</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            keypoints: 特征点</span>
-<span class="sd">            descriptors: 描述值</span>
+<span class="sd">            特征点 (keypoints): </span>
+<span class="sd">            描述值 (descriptors): </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 转换为灰度图像</span>
         <span class="k">if</span> <span class="n">grayscale</span><span class="p">:</span>
@@ -2383,7 +2346,7 @@ algorithm包括:
 <span class="sd">            ValueError: 算法不存在</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list: 小图在大图中的范围[x, y, w, h ]</span>
+<span class="sd">            小图在大图中的范围 (list): [xmin,ymin,xmax,ymax]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 计算关键点和描述符</span>
         <span class="n">kp_template</span><span class="p">,</span> <span class="n">des_template</span> <span class="o">=</span> <span class="n">Images</span><span class="o">.</span><span class="n">detect_and_compute_features</span><span class="p">(</span>
@@ -2586,20 +2549,22 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>keypoints</code></td>          <td>
+<td><code>特征点</code></td>          <td>
+                <code>keypoints</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>特征点</p>
+              
             </div>
           </td>
         </tr>
         <tr>
-<td><code>descriptors</code></td>          <td>
+<td><code>描述值</code></td>          <td>
+                <code>descriptors</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>描述值</p>
+              
             </div>
           </td>
         </tr>
@@ -2671,8 +2636,8 @@ algorithm包括:
 <span class="sd">        ValueError: &quot;Invalid feature detection method&quot;</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        keypoints: 特征点</span>
-<span class="sd">        descriptors: 描述值</span>
+<span class="sd">        特征点 (keypoints): </span>
+<span class="sd">        描述值 (descriptors): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 转换为灰度图像</span>
     <span class="k">if</span> <span class="n">grayscale</span><span class="p">:</span>
@@ -2801,11 +2766,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>list</code></td>          <td>
+<td><code>颜色值所有点</code></td>          <td>
+                <code>list</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>颜色值所有点[(x,y),(x,y),(x,y)]</p>
+              <p>[(x,y),(x,y),(x,y)]</p>
             </div>
           </td>
         </tr>
@@ -2852,7 +2818,7 @@ algorithm包括:
 <span class="sd">        threshold (int, optional): 颜色相似度. Defaults to 4.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: 颜色值所有点[(x,y),(x,y),(x,y)]</span>
+<span class="sd">        颜色值所有点 (list): [(x,y),(x,y),(x,y)]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">,</span> <span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">]</span>
@@ -2969,20 +2935,22 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>x</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>x</p>
+              
             </div>
           </td>
         </tr>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>y</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>y</p>
+              
             </div>
           </td>
         </tr>
@@ -3026,8 +2994,8 @@ algorithm包括:
 <span class="sd">        threshold (int, optional): 颜色相似度. Defaults to 4.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: x</span>
-<span class="sd">        int: y</span>
+<span class="sd">        x (int): </span>
+<span class="sd">        y (int): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y_min</span><span class="p">:</span><span class="n">y_max</span><span class="p">,</span> <span class="n">x_min</span><span class="p">:</span><span class="n">x_max</span><span class="p">]</span>
@@ -3120,7 +3088,7 @@ algorithm包括:
           </td>
           <td>
             <div class="doc-md-description">
-              <p>范围[]. Defaults to None. 像素数量与查找效率几乎成正比</p>
+              <p>范围[xmin,ymin,xmax,ymax]. Defaults to None. 像素数量与查找效率几乎成正比</p>
             </div>
           </td>
           <td>
@@ -3169,10 +3137,11 @@ algorithm包括:
     <tbody>
         <tr>
 <td><code>max_loc</code></td>          <td>
+                <code>list</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>(x,y)</p>
+              <p>xmin,ymin,xmax,ymax</p>
             </div>
           </td>
         </tr>
@@ -3248,11 +3217,11 @@ algorithm包括:
 <span class="sd">        img (mat): opencv格式图像</span>
 <span class="sd">        template (mat): opencv格式图像</span>
 <span class="sd">        threshold (float, optional): 匹配度. Defaults to 0.8.</span>
-<span class="sd">        region (list, optional): 范围[]. Defaults to None. 像素数量与查找效率几乎成正比</span>
+<span class="sd">        region (list, optional): 范围[xmin,ymin,xmax,ymax]. Defaults to None. 像素数量与查找效率几乎成正比</span>
 <span class="sd">        level (int, optional): 图像金字塔等级. Defaults to 3. 全屏1080x2400查找情况下level3效率是level2的5倍,是level1的10倍,分辨率越低提升越不明显</span>
 <span class="sd">        debug (bool,optional): 调试模式(方框绘制并显示) Defaults to False.</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        max_loc: (x,y)</span>
+<span class="sd">        max_loc (list): xmin,ymin,xmax,ymax</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 设置查找区域</span>
     <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -3414,29 +3383,22 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>x</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>x</p>
+              <p>第一个点的横坐标</p>
             </div>
           </td>
         </tr>
         <tr>
-<td><code>int</code></td>          <td>
+<td><code>y</code></td>          <td>
+                <code>int</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>y</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-<td></td>          <td>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>第一个点的坐标</p>
+              <p>第一个点的纵坐标</p>
             </div>
           </td>
         </tr>
@@ -3487,9 +3449,9 @@ algorithm包括:
 <span class="sd">        threshold (int, optional): 相似度. Defaults to 4.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: x</span>
-<span class="sd">        int: y</span>
-<span class="sd">        第一个点的坐标</span>
+<span class="sd">        x (int): 第一个点的横坐标</span>
+<span class="sd">        y (int): 第一个点的纵坐标</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">first_color_points</span> <span class="o">=</span> <span class="n">Images</span><span class="o">.</span><span class="n">find_all_color</span><span class="p">(</span>
         <span class="n">img</span><span class="p">,</span> <span class="n">first_color</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span>
@@ -3564,11 +3526,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>mat</code></td>          <td>
+<td><code>opencv格式图像</code></td>          <td>
+                <code><span title="numpy">np</span>.<span title="numpy.array">array</span></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>opencv格式图像</p>
+              
             </div>
           </td>
         </tr>
@@ -3599,7 +3562,7 @@ algorithm包括:
 <span class="sd">        path (str): 图像路径</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        mat: opencv格式图像</span>
+<span class="sd">        opencv格式图像 (np.array): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># 下载图片数据</span>
@@ -3773,11 +3736,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>list</code></td>          <td>
+<td><code>小图在大图中的范围</code></td>          <td>
+                <code>list</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>小图在大图中的范围[x, y, w, h ]</p>
+              <p>[xmin,ymin,xmax,ymax]</p>
             </div>
           </td>
         </tr>
@@ -3899,7 +3863,7 @@ algorithm包括:
 <span class="sd">        ValueError: 算法不存在</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: 小图在大图中的范围[x, y, w, h ]</span>
+<span class="sd">        小图在大图中的范围 (list): [xmin,ymin,xmax,ymax]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># 计算关键点和描述符</span>
     <span class="n">kp_template</span><span class="p">,</span> <span class="n">des_template</span> <span class="o">=</span> <span class="n">Images</span><span class="o">.</span><span class="n">detect_and_compute_features</span><span class="p">(</span>
@@ -4043,11 +4007,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>str</code></td>          <td>
+<td><code>坐标颜色值</code></td>          <td>
+                <code>str</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>返回坐标颜色值</p>
+              
             </div>
           </td>
         </tr>
@@ -4079,7 +4044,7 @@ algorithm包括:
 <span class="sd">        y (int): 纵坐标</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: 返回坐标颜色值</span>
+<span class="sd">        坐标颜色值 (str): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
     <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">{:02x}{:02x}{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
@@ -4158,11 +4123,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>mat</code></td>          <td>
+<td><code>opencv格式图像</code></td>          <td>
+                <code><span title="numpy">np</span>.<span title="numpy.array">array</span></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>opencv格式图像</p>
+              
             </div>
           </td>
         </tr>
@@ -4195,7 +4161,7 @@ algorithm包括:
 <span class="sd">            - cv2.IMREAD_GRAYSCALE</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        mat: opencv格式图像</span>
+<span class="sd">        opencv格式图像 (np.array): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -4429,11 +4395,12 @@ algorithm包括:
     </thead>
     <tbody>
         <tr>
-<td><code>mat</code></td>          <td>
+<td><code>opencv格式图像</code></td>          <td>
+                <code><span title="numpy">np</span>.<span title="numpy.array">array</span></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>opencv格式图像</p>
+              
             </div>
           </td>
         </tr>
@@ -4458,7 +4425,7 @@ algorithm包括:
 <span class="sd">        raw (byte): raw</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        mat: opencv格式图像</span>
+<span class="sd">        opencv格式图像 (np.array): </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imdecode</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_COLOR</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>

@@ -26,7 +26,7 @@ class Colors:
             color (int): 0xFF112233
 
         Returns:
-            str: 返回颜色值的字符串，格式为 "#AARRGGBB"。
+            颜色值的字符串 (str): 格式为 "#AARRGGBB"。
         """
         # 将整数RGB颜色值转换为16进制字符串
         hex_color = hex(color)[2:].upper().zfill(8)
@@ -42,7 +42,7 @@ class Colors:
             color (int): 0xFF112233
 
         Returns:
-            int: 返回颜色color的R通道的值,范围0~255.
+            颜色color的R通道的值 (int): 范围0~255.
         """
         # 右移24位获取红色通道的值
         red = (color >> 16) & 0xFF
@@ -56,7 +56,7 @@ class Colors:
             color (int): 0xFF112233
 
         Returns:
-            int: 颜色color的g通道的值,范围0~255.
+            颜色color的g通道的值 (int): 范围0~255.
         """
         # 右移24位获取绿色通道的值
         green = (color >> 8) & 0xFF
@@ -70,7 +70,7 @@ class Colors:
             color (int): 0xFF112233
 
         Returns:
-            int: 颜色color的b通道的值,范围0~255.
+            颜色color的b通道的值 (int): 范围0~255.
         """
         # 右移24位获取蓝色通道的值
         blue = (color >> 0) & 0xFF
@@ -90,7 +90,7 @@ class Colors:
                     "rgb+": 加权rgb欧拉距离匹配(LAB Delta E)。
                     "hs": hs欧拉距离匹配。hs为HSV空间的色调值。
         - Returns:
-            bool: 返回两个颜色是否相似
+            (两个颜色是否相似) bool: 
         """
         # 差值匹配算法
         if algorithm == "diff":
@@ -135,7 +135,7 @@ class Colors:
             color_str (str): "#112233"
 
         Returns:
-            int: 16进制颜色值
+            16进制颜色值 (int): 
         """
         color_str = color_str.strip("#")  # 移除字符串开头的 "#"
         red = int(color_str[0:2], 16)  # 提取红色分量并转换为整数
@@ -253,7 +253,7 @@ def raw2opencv(raw):
         raw (byte): raw
 
     Returns:
-        mat: opencv格式图像
+        opencv格式图像 (np.array): 
     """
     return cv2.imdecode(np.frombuffer(raw, dtype=np.uint8), cv2.IMREAD_COLOR)
 
@@ -270,7 +270,7 @@ class Images:
                 - cv2.IMREAD_GRAYSCALE
 
         Returns:
-            mat: opencv格式图像
+            opencv格式图像 (np.array): 
         """
         return cv2.imread(path, flags=flag)
 
@@ -282,7 +282,7 @@ class Images:
             path (str): 图像路径
 
         Returns:
-            mat: opencv格式图像
+            opencv格式图像 (np.array): 
         """
 
         # 下载图片数据
@@ -321,7 +321,7 @@ class Images:
             y (int): 纵坐标
 
         Returns:
-            str: 返回坐标颜色值
+            坐标颜色值 (str): 
         """
         b, g, r = img[y, x]
         return "#{:02x}{:02x}{:02x}".format(r, g, b)
@@ -337,8 +337,8 @@ class Images:
             threshold (int, optional): 颜色相似度. Defaults to 4.
 
         Returns:
-            int: x
-            int: y
+            x (int): 
+            y (int): 
         """
         x_min, y_min, x_max, y_max = region or (0, 0, img.shape[1], img.shape[0])
         img = img[y_min:y_max, x_min:x_max]
@@ -363,7 +363,7 @@ class Images:
             threshold (int, optional): 颜色相似度. Defaults to 4.
 
         Returns:
-            list: 颜色值所有点[(x,y),(x,y),(x,y)]
+            颜色值所有点 (list): [(x,y),(x,y),(x,y)]
         """
         x_min, y_min, x_max, y_max = region or (0, 0, img.shape[1], img.shape[0])
         img = img[y_min:y_max, x_min:x_max]
@@ -393,9 +393,9 @@ class Images:
             threshold (int, optional): 相似度. Defaults to 4.
 
         Returns:
-            int: x
-            int: y
-            第一个点的坐标
+            x (int): 第一个点的横坐标
+            y (int): 第一个点的纵坐标
+            
         """
         first_color_points = Images.find_all_color(
             img, first_color, region=region, threshold=threshold
@@ -421,11 +421,11 @@ class Images:
             img (mat): opencv格式图像
             template (mat): opencv格式图像
             threshold (float, optional): 匹配度. Defaults to 0.8.
-            region (list, optional): 范围[]. Defaults to None. 像素数量与查找效率几乎成正比
+            region (list, optional): 范围[xmin,ymin,xmax,ymax]. Defaults to None. 像素数量与查找效率几乎成正比
             level (int, optional): 图像金字塔等级. Defaults to 3. 全屏1080x2400查找情况下level3效率是level2的5倍,是level1的10倍,分辨率越低提升越不明显
             debug (bool,optional): 调试模式(方框绘制并显示) Defaults to False.
         Returns:
-            max_loc: (x,y)
+            max_loc (list): xmin,ymin,xmax,ymax
         """
         # 设置查找区域
         x_min, y_min, x_max, y_max = region or (0, 0, img.shape[1], img.shape[0])
@@ -491,8 +491,8 @@ class Images:
             ValueError: "Invalid feature detection method"
 
         Returns:
-            keypoints: 特征点
-            descriptors: 描述值
+            特征点 (keypoints): 
+            描述值 (descriptors): 
         """
         # 转换为灰度图像
         if grayscale:
@@ -550,7 +550,7 @@ class Images:
             ValueError: 算法不存在
 
         Returns:
-            list: 小图在大图中的范围[x, y, w, h ]
+            小图在大图中的范围 (list): [xmin,ymin,xmax,ymax]
         """
         # 计算关键点和描述符
         kp_template, des_template = Images.detect_and_compute_features(

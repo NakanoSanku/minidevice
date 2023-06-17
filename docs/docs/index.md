@@ -10,16 +10,15 @@ pip install minidevice
 
 ## Project Structure
 - MiniDevice
-    - adb
     - images
     - device
         - screencap
-            - [Minicap](minicap.md)
-            - [ADBcap](adb.md#minidevice.adb.ADBcap)
-            - [DriodCast](DriodCast.md)
+            - Minicap
+            - ADBcap
+            - DroidCast
         - touch
-            - [Minitouch](minitouch.md)
-            - [ADBtouch](adb.md#minidevice.adb.ADBtouch)
+            - Minitouch
+            - ADBtouch
 
 ## Features
 |功能|函数|
