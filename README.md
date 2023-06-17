@@ -38,7 +38,7 @@
 ## 使用实例
 采用抽象类定义截图基类
 
-所以DroidCast,Minicap,ADBcap使用方法一模一样
+所以[DroidCast](https://github.com/rayworks/DroidCast),[Minicap](https://github.com/DeviceFarmer/minicap),ADBcap使用方法一模一样
 ```python
 from minidevice import Minicap
 #创建截图对象
@@ -48,7 +48,7 @@ cap = capdevice.screen_opencv()
 #截图并保存本地
 capdevice.save_screen()
 ```
-当然minitouh,ADBtouch使用方法一模一样
+当然[minitouh](https://github.com/DeviceFarmer/minitouch),ADBtouch使用方法一模一样
 ```python
 from minidevice import Minitouch
 #创建截图对象
