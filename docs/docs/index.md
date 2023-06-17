@@ -16,6 +16,7 @@ pip install minidevice
         - screencap
             - [Minicap](minicap.md)
             - [ADBcap](adb.md#minidevice.adb.ADBcap)
+            - [DriodCast](DriodCast.md)
         - touch
             - [Minitouch](minitouch.md)
             - [ADBtouch](adb.md#minidevice.adb.ADBtouch)

@@ -10,6 +10,7 @@ nav:
     - images: images.md
     - screencap: screencap.md
     - minicap: minicap.md
+    - DriodCast: DriodCast.md
     - touch: touch.md
     - minitouch: minitouch.md
 
