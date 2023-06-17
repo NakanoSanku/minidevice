@@ -27,13 +27,13 @@ class ADB:
         adb_command.extend(command)
         try:
             process = subprocess.Popen(
-                adb_command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
+                adb_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
             )
             data, err = process.communicate(timeout=10)
             if process.returncode == 0:
                 return data
             else:
-                logger.error("\nADB命令执行失败\n报错信息:{}".format(err))
+                logger.error("ADB命令执行失败\n报错信息:{}".format(err))
         except FileNotFoundError:
             logger.error("ADB不存在或无法执行")
         except subprocess.TimeoutExpired:
