@@ -16,14 +16,14 @@ class DroidCast(ScreenCap):
         self.DroidCastServerPort = DroidCastServerPort
         self.class_path = APK_ANDROID_PATH 
         self.DroidCastSession = requests.Session()
-        self._install()
-        self._start()
+        self.__install()
+        self.__start()
 
-    def _install(self):
+    def __install(self):
         self.droidcast_adb.push_file(APK_PATH, self.class_path)
         self.droidcast_adb.install_apk(APK_PATH)
 
-    def _start_droidcast(self):
+    def __start_droidcast(self):
         out = str(
             self.droidcast_adb.adb_command(
                 ["shell", "pm", "path", "com.rayworks.droidcast"]
@@ -56,7 +56,7 @@ class DroidCast(ScreenCap):
             stdout=subprocess.DEVNULL,
         )
 
-    def _forward_port(self):
+    def __forward_port(self):
         self.droidcast_port = self.droidcast_adb.forward_port(
             "tcp:{}".format(self.DroidCastServerPort)
         )
@@ -66,18 +66,19 @@ class DroidCast(ScreenCap):
         print(self.droidcast_adb.list_forward_port())
         print(self.droidcast_url)
 
-    def _start(self):
-        self._start_droidcast()
-        self._forward_port()
+    def __start(self):
+        self.__start_droidcast()
+        self.__forward_port()
         print("DroidCast启动完成")
 
-    def _stop(self):
+    def __stop(self):
         self.droidcast_adb.remove_forward(self.droidcast_port)  # 清理转发端口
         if self.droidcast_popen.poll() is None:
             self.droidcast_popen.kill()  # 关闭管道
 
     def screencap_raw(self) -> bytes:
         if self.droidcast_popen.poll() is not None:
-            self._stop()
-            self._start()
+            self.__stop()
+            self.__start()
         return self.DroidCastSession.get(self.droidcast_url, timeout=3).content
+

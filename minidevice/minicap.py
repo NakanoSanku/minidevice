@@ -206,7 +206,7 @@ class Minicap(ScreenCap):
     ) -> None:
         self.minicap_adb = ADB(device)
         self.use_stream = use_stream
-        self._get_device_info()
+        self.__get_device_info()
         if minicap_name is None:
             minicap_name = "minicap_{}".format(time.time())
         minicap_params = {
@@ -215,23 +215,23 @@ class Minicap(ScreenCap):
             "quality": quality,
             "ip": ip,
         }
-        self._get_minicap_params(**minicap_params)
+        self.__get_minicap_params(**minicap_params)
         if self.use_stream:
-            self._start_minicap_by_stream()
+            self.__start_minicap_by_stream()
 
     def screencap_raw(self) -> bytes:
         if self.use_stream:
             if self.minicap_popen.poll() is not None:
                 logger.warning("尝试重启minicap中")
-                self._stop_minicap_by_stream()
-                self._start_minicap_by_stream()
+                self.__stop_minicap_by_stream()
+                self.__start_minicap_by_stream()
             logger.debug("screen by minicap stream")
             return self.screen_queue.get()
         else:
             logger.debug("screen by minicap frame")
-            return self._minicap_frame()
+            return self.__minicap_frame()
 
-    def _minicap_frame(self):
+    def __minicap_frame(self):
         adb_command = [
             "shell",
             "LD_LIBRARY_PATH=/data/local/tmp",
@@ -245,18 +245,18 @@ class Minicap(ScreenCap):
         jpg_data = jpg_data.replace(line_breaker(self.sdk), b"\n")
         return jpg_data
 
-    def _get_device_info(self):
+    def __get_device_info(self):
         self.vm_size = self.minicap_adb.get_screen_resolution()
         self.abi = self.minicap_adb.get_abi()
         self.sdk = self.minicap_adb.get_sdk()
 
-    def _get_minicap_params(self, minicap_name, quality, rate, ip):
+    def __get_minicap_params(self, minicap_name, quality, rate, ip):
         self.minicap_name = minicap_name
         self.quality = quality
         self.rate = rate
         self.ip = ip
 
-    def _minicap_available(func):
+    def __minicap_available(func):
         def wrapper(self, *args, **kwargs):
             try:
                 adb_command = [
@@ -275,7 +275,7 @@ class Minicap(ScreenCap):
 
         return wrapper
 
-    def _minicap_install(self):
+    def __minicap_install(self):
         if self.sdk == 32 and self.abi == "x86_64":
             self.abi = "x86"
 
@@ -288,8 +288,8 @@ class Minicap(ScreenCap):
         )
         self.minicap_adb.change_file_permission("+x", MNC_HOME)
 
-    @_minicap_available
-    def _start_minicap(self):
+    @__minicap_available
+    def __start_minicap(self):
         """启动adb"""
         adb_command = [ADB_PATH]
         if self.minicap_adb.device is not None:
@@ -309,27 +309,27 @@ class Minicap(ScreenCap):
         logger.info("启动minicap")
         return True
 
-    def _forward_minicap(self):
+    def __forward_minicap(self):
         """端口转发"""
         self.minicap_port = self.minicap_adb.forward_port(
             "localabstract:{}".format(self.minicap_name)
         )
 
-    def _read_minicap_stream(self):
+    def __read_minicap_stream(self):
         self.minicap_stream = MinicapStream.getBuilder(self.ip, self.minicap_port)
         self.minicap_stream.run()
         self.banner = self.minicap_stream.banner
         self.screen_queue = self.minicap_stream.queue
 
-    def _start_minicap_by_stream(self):
-        if not self._start_minicap():
-            self._minicap_install()
-            if not self._start_minicap():
+    def __start_minicap_by_stream(self):
+        if not self.__start_minicap():
+            self.__minicap_install()
+            if not self.__start_minicap():
                 raise Exception("minicap不可用")
-        self._forward_minicap()
-        self._read_minicap_stream()
+        self.__forward_minicap()
+        self.__read_minicap_stream()
 
-    def _stop_minicap_by_stream(self):
+    def __stop_minicap_by_stream(self):
         self.minicap_stream.stop()  # 停止stream
         self.minicap_adb.remove_forward(self.minicap_port)  # 清理端口
         if self.minicap_popen.poll() is None:  # 清理管道
