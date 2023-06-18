@@ -20,4 +20,5 @@ class ScreenCap(ABC):
         Args:
             filename (str, optional): 截图保存路径. Defaults to "screencap.png".
         """
-        cv2.imencode(ext=".jpg", img=self.screencap_opencv())[1].tofile(filename)
+        with open(filename,"wb") as fp:
+            fp.write(self.screencap_raw())

@@ -24,7 +24,7 @@ class Minitouch(Touch, MNTDevice):
         self.minitouch_adb.push_file(f"{MINITOUCH_PATH}/{self.abi}/minitouch", MNT_HOME)
         self.minitouch_adb.change_file_permission("+x", MNT_HOME)
 
-    def click(self, x: int, y: int, duration: int):
+    def click(self, x: int, y: int, duration: int = 100):
         """
         click minitouch 点击
 

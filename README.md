@@ -1,5 +1,5 @@
 # minidevice v2
-重构代码,添加DroidCast截图方法
+无需关系每个实现方式本身,只需要填入方法即可，未来维护升级添加新方法也只需要在Minidevice中添加新的方法映射即可
 ## minicap/minitouch一键配置
 ### 源码
 [sh脚本](script.sh)
@@ -36,6 +36,35 @@
 ## requirements
 `opencv-python` [`pyminitouch`](https://github.com/williamfzc/pyminitouch)
 ## 使用实例
+
+```python
+#操作方法
+TOUCH_METHODS = {
+    "Minitouch": Minitouch,
+     "ADBtouch": ADBtouch
+     }
+```
+```python
+#截图方法
+SCREEN_CAP_METHODS = {
+    "DroidCast": DroidCast,
+     "Minicap": Minicap, 
+     "ADBcap": ADBcap
+     }
+```
+```python
+from minidevice import MiniDevice
+d=MiniDevice(device="127.0.0.1:16834", screen_cap_method="DroidCast", touch_method="Minitouch")
+#截图
+img=d.get_screen()
+#保存截图
+d.save_screen()
+#点击
+d.click(x=100,y=100,duration=100)
+#滑动
+d.swipe([(100,100),(500,500)],duration=300)
+```
+
 采用抽象类定义截图基类
 
 所以[DroidCast](https://github.com/rayworks/DroidCast),[Minicap](https://github.com/DeviceFarmer/minicap),ADBcap使用方法一模一样
