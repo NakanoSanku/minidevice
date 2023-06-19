@@ -335,7 +335,9 @@ class Minicap(ScreenCap):
         if self.minicap_popen.poll() is None:  # 清理管道
             self.minicap_popen.kill()
 
-
+    def __del__(self):
+        self.__stop_minicap_by_stream()
+        
 if __name__ == "__main__":
     a = Minicap("127.0.0.1:16384")
     time.sleep(5)

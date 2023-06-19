@@ -49,6 +49,8 @@ class Minitouch(Touch, MNTDevice):
             f"minitouch swipe from ({points[0]}) to ({points[-1]}) consume:{duration}ms"
         )
 
+    def __del__(self):
+        MNTDevice.stop(self)
 
 if __name__ == "__main__":
     a = Minitouch("127.0.0.1:16384")
