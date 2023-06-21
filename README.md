@@ -1,3 +1,5 @@
+## 6.21 试图添加scrcpy进入(比较繁琐，没有实装测试中)
+
 # minidevice v2
 无需关系每个实现方式本身,只需要填入方法即可，未来维护升级添加新方法也只需要在Minidevice中添加新的方法映射即可
 ## minicap/minitouch一键配置
