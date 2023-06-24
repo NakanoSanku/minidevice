@@ -1,6 +1,6 @@
 import time
 import scrcpy
-from touch import Touch
+from minidevice.touch import Touch
 
 
 class ScrcpyTouch(Touch):
