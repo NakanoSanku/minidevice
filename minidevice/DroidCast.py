@@ -76,6 +76,7 @@ class DroidCast(ScreenCap):
     def __start(self):
         self.__start_droidcast()
         self.__forward_port()
+        self.screencap_raw()
         print("DroidCast启动完成")
 
     def __stop(self):
