@@ -88,6 +88,6 @@ class DroidCast(ScreenCap):
             self.__start()
         return self.DroidCastSession.get(self.droidcast_url, timeout=3).content
 
-    # def __del__(self):
-    #     self.__stop()
+    def __del__(self):
+        self.__stop()
     
