@@ -255,11 +255,10 @@ class Minicap(ScreenCap):
         self.abi = self.minicap_adb.get_abi()
         self.sdk = self.minicap_adb.get_sdk()
 
-    def __get_minicap_params(self, minicap_name, quality, rate, ip):
+    def __get_minicap_params(self, minicap_name, quality, rate):
         self.minicap_name = minicap_name
         self.quality = quality
         self.rate = rate
-        self.ip = ip
 
     def __minicap_available(func):
         def wrapper(self, *args, **kwargs):
