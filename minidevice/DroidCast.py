@@ -79,7 +79,6 @@ class DroidCast(ScreenCap):
         print("DroidCast启动完成")
 
     def __stop(self):
-        self.droidcast_adb.remove_forward(self.droidcast_port)  # 清理转发端口
         if self.droidcast_popen.poll() is None:
             self.droidcast_popen.kill()  # 关闭管道
 
@@ -89,6 +88,6 @@ class DroidCast(ScreenCap):
             self.__start()
         return self.DroidCastSession.get(self.droidcast_url, timeout=3).content
 
-    def __del__(self):
-        self.__stop()
+    # def __del__(self):
+    #     self.__stop()
     

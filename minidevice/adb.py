@@ -121,7 +121,7 @@ class ADB:
     def kill_process(self, pid):
         self.__run_adb_command(["shell", "kill", str(pid)])
 
-    def __screencap_raw(self):
+    def _screencap_raw(self):
         """获取截图源数据"""
         return self.adb_command(["exec-out", "screencap", "-p"])
 

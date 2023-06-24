@@ -13,7 +13,10 @@ class ScrcpyTouch(Touch):
             
         """
         self.client = device
-
+        if not self.client.alive:
+            self.client.start(daemon_threaded=True)
+            time.sleep(2)
+            
     def click(self, x: int, y: int, duration: int = 100):
         self.client.control.touch(x, y, scrcpy.ACTION_DOWN)
         time.sleep(duration / 1000)
@@ -25,3 +28,4 @@ class ScrcpyTouch(Touch):
             time.sleep(duration / (len(points) * 1000))
             self.client.control.touch(point[0], point[1], scrcpy.ACTION_MOVE)
         self.client.control.touch(points[-1][0], points[-1][1], scrcpy.ACTION_UP)
+    

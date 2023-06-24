@@ -4,7 +4,7 @@ with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
 
 setup(name='minidevice',
-      version='2.1.0',
+      version='2.1.2',
       description='Android Auto Pypi',
       author='KateTseng',
       author_email='Kate.TsengK@outlook.com',
@@ -19,7 +19,7 @@ setup(name='minidevice',
       install_requires=['opencv-python>=4.7.0.72',
                         'pyminitouch>=0.3.3',
                         'scrcpy-client',
-                        'request>=2.31.0'
+                        'requests>=2.31.0'
                         ],
       python_requires='>=3'
       )

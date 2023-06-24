@@ -1,4 +1,4 @@
-from minidevice import logger
+from minidevice.logger import logger
 from minidevice.adb import ADB
 from minidevice.touch import Touch
 

@@ -1,9 +1,7 @@
-from minidevice import logger
+from minidevice.logger import logger
 from minidevice.adb import ADB
 from minidevice.screencap import ScreenCap
 
-import scrcpy
-scrcpy.Client()
 class ADBcap(ScreenCap, ADB):
     def __init__(self, device) -> None:
         """
@@ -16,4 +14,4 @@ class ADBcap(ScreenCap, ADB):
 
     def screencap_raw(self) -> bytes:
         logger.debug(f"screen by ADB")
-        return ADB.__screencap_raw(self)
+        return ADB._screencap_raw(self)

@@ -318,7 +318,7 @@ class Minicap(ScreenCap):
         )
 
     def __read_minicap_stream(self):
-        self.minicap_stream = MinicapStream.getBuilder(self.ip, self.minicap_port)
+        self.minicap_stream = MinicapStream.getBuilder("127.0.0.1", self.minicap_port)
         self.minicap_stream.run()
         self.banner = self.minicap_stream.banner
         self.screen_queue = self.minicap_stream.queue
@@ -333,7 +333,7 @@ class Minicap(ScreenCap):
 
     def __stop_minicap_by_stream(self):
         self.minicap_stream.stop()  # 停止stream
-        self.minicap_adb.remove_forward(self.minicap_port)  # 清理端口
+        # self.minicap_adb.remove_forward(self.minicap_port)  # 清理端口
         if self.minicap_popen.poll() is None:  # 清理管道
             self.minicap_popen.kill()
 
