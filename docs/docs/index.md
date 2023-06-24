@@ -10,25 +10,32 @@ pip install minidevice
 
 ## Project Structure
 - MiniDevice
-    - images
-    - device
-        - screencap
-            - Minicap
-            - ADBcap
-            - DroidCast
-        - touch
-            - Minitouch
-            - ADBtouch
+    - screencap
+        - Minicap
+        - ADBcap
+        - DroidCast
+        - ScrcpyCap
+    - touch
+        - Minitouch
+        - ADBtouch
+        - ScrcpyTouch
 
-## Features
-|功能|函数|
-|----|---|
-|找色|Images.find_color|
-|找色(all)|Images.find_all_colors|
-|多点找色|Images.find_multi_colors|
-|找图|Images.find_image|
-|特征匹配|Images.match_features|
+阅读下面部分之前先阅读API文档
+## Q&A
+Q: 设备id是什么
 
+A: adb devices 每行的第一个字段
 
-具体使用参考api文档具体内容
+Q: scrcpy.Client是什么
+
+A: 通过scrcpy.Client()创建的对象
+> 具体参考 https://github.com/leng-yue/py-scrcpy-client
+
+scrcpy.Client()简要参数说明
+
+- device 设备id
+- max_width 最大宽度
+- bitrate 码率
+- max_fps 最大帧率
+
 

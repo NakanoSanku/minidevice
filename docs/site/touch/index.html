@@ -226,20 +226,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../images/" class="md-nav__link">
-        images
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../screencap/" class="md-nav__link">
         screencap
       </a>
@@ -308,6 +294,87 @@
           <li class="md-nav__item">
   <a href="#minidevice.touch.Touch.swipe" class="md-nav__link">
     swipe()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.minitouch" class="md-nav__link">
+    minidevice.minitouch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.minitouch.Minitouch" class="md-nav__link">
+    Minitouch
+  </a>
+  
+    <nav class="md-nav" aria-label="Minitouch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minidevice.minitouch.Minitouch.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.adbtouch" class="md-nav__link">
+    minidevice.adbtouch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.adbtouch.ADBtouch" class="md-nav__link">
+    ADBtouch
+  </a>
+  
+    <nav class="md-nav" aria-label="ADBtouch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minidevice.adbtouch.ADBtouch.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.scrcpytouch" class="md-nav__link">
+    minidevice.scrcpytouch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.scrcpytouch.ScrcpyTouch" class="md-nav__link">
+    ScrcpyTouch
+  </a>
+  
+    <nav class="md-nav" aria-label="ScrcpyTouch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minidevice.scrcpytouch.ScrcpyTouch.__init__" class="md-nav__link">
+    __init__()
   </a>
   
 </li>
@@ -390,6 +457,87 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#minidevice.minitouch" class="md-nav__link">
+    minidevice.minitouch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.minitouch.Minitouch" class="md-nav__link">
+    Minitouch
+  </a>
+  
+    <nav class="md-nav" aria-label="Minitouch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minidevice.minitouch.Minitouch.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.adbtouch" class="md-nav__link">
+    minidevice.adbtouch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.adbtouch.ADBtouch" class="md-nav__link">
+    ADBtouch
+  </a>
+  
+    <nav class="md-nav" aria-label="ADBtouch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minidevice.adbtouch.ADBtouch.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.scrcpytouch" class="md-nav__link">
+    minidevice.scrcpytouch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minidevice.scrcpytouch.ScrcpyTouch" class="md-nav__link">
+    ScrcpyTouch
+  </a>
+  
+    <nav class="md-nav" aria-label="ScrcpyTouch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minidevice.scrcpytouch.ScrcpyTouch.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -406,6 +554,11 @@
 
 
   <h1>touch</h1>
+
+<blockquote>
+<p>所有截图类基于Touch,所以他们操作方法与Touch相同</p>
+</blockquote>
+
 
 <div class="doc doc-object doc-module">
 
@@ -450,14 +603,40 @@
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Touch</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Touch</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@abstractclassmethod</span>
-    <span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;点击&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        click 点击</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): 横坐标</span>
+<span class="sd">            y (int): 纵坐标</span>
+<span class="sd">            duration (int, optional): 持续时间. Defaults to 100.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="nd">@abstractclassmethod</span>
-    <span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;滑动&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        swipe 滑动</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            points (list): [(x,y),(x,y),(x,y)] 坐标列表</span>
+<span class="sd">            duration (int): 持续时间. Defaults to 300.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
         </details>
 
@@ -478,22 +657,92 @@
 
 
 <h3 id="minidevice.touch.Touch.click" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">click</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">click</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span></code>
 
 </h3>
 
 
   <div class="doc doc-contents ">
   
-      <p>点击</p>
+      <p>click 点击</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>x</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>横坐标</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>纵坐标</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>duration</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>持续时间. Defaults to 100.</p>
+            </div>
+          </td>
+          <td>
+                <code>100</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\touch.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractclassmethod</span>
-<span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;点击&quot;&quot;&quot;</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractclassmethod</span>
+<span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    click 点击</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (int): 横坐标</span>
+<span class="sd">        y (int): 纵坐标</span>
+<span class="sd">        duration (int, optional): 持续时间. Defaults to 100.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -505,22 +754,76 @@
 
 
 <h3 id="minidevice.touch.Touch.swipe" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">swipe</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">swipe</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span></code>
 
 </h3>
 
 
   <div class="doc doc-contents ">
   
-      <p>滑动</p>
+      <p>swipe 滑动</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>points</code></td>
+          <td>
+                <code>list</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>[(x,y),(x,y),(x,y)] 坐标列表</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>duration</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>持续时间. Defaults to 300.</p>
+            </div>
+          </td>
+          <td>
+                <code>300</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
       <details class="quote">
         <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\touch.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractclassmethod</span>
-<span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;滑动&quot;&quot;&quot;</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@abstractclassmethod</span>
+<span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    swipe 滑动</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        points (list): [(x,y),(x,y),(x,y)] 坐标列表</span>
+<span class="sd">        duration (int): 持续时间. Defaults to 300.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -543,6 +846,593 @@
   </div>
 
 </div>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="minidevice.minitouch"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="minidevice.minitouch.Minitouch" class="doc doc-heading">
+        <code>Minitouch</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="minidevice.touch.Touch" href="#minidevice.touch.Touch">Touch</a></code>, <code><span title="pyminitouch.MNTDevice">MNTDevice</span></code></p>
+
+
+
+        <details class="quote">
+          <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\minitouch.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Minitouch</span><span class="p">(</span><span class="n">Touch</span><span class="p">,</span> <span class="n">MNTDevice</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        __init__ minitouch点击方式</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device (str): 设备id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minitouch_adb</span> <span class="o">=</span> <span class="n">ADB</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__get_device_info</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__minitouch_install</span><span class="p">()</span>
+        <span class="n">MNTDevice</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__get_device_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">minitouch_adb</span><span class="o">.</span><span class="n">get_abi</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__minitouch_install</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MNT_HOME</span> <span class="o">=</span> <span class="s2">&quot;/data/local/tmp/minitouch&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minitouch_adb</span><span class="o">.</span><span class="n">push_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MINITOUCH_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">abi</span><span class="si">}</span><span class="s2">/minitouch&quot;</span><span class="p">,</span> <span class="n">MNT_HOME</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minitouch_adb</span><span class="o">.</span><span class="n">change_file_permission</span><span class="p">(</span><span class="s2">&quot;+x&quot;</span><span class="p">,</span> <span class="n">MNT_HOME</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+        <span class="n">MNTDevice</span><span class="o">.</span><span class="n">tap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)],</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;minitouch click (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) consume:</span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">ms&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
+        <span class="n">MNTDevice</span><span class="o">.</span><span class="n">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;minitouch swipe from (</span><span class="si">{</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) to (</span><span class="si">{</span><span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">) consume:</span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">ms&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MNTDevice</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+        </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="minidevice.minitouch.Minitouch.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p><strong>init</strong> minitouch点击方式</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>device</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>设备id</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\minitouch.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    __init__ minitouch点击方式</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device (str): 设备id</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">minitouch_adb</span> <span class="o">=</span> <span class="n">ADB</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__get_device_info</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__minitouch_install</span><span class="p">()</span>
+    <span class="n">MNTDevice</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div><pre><code class="language-py">from minidevice import Minitouch
+#创建操作对象
+touchdevice = Minitouch(&quot;127.0.0.1:16834&quot;)
+#点击
+touchdevice.click(x=101,y=101,duration=150)
+#长按
+touchdevice.click(x=101,y=101,duration=500)
+#滑动
+touchdevice.swipe([(100,100),(500,500)])
+</code></pre>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="minidevice.adbtouch"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="minidevice.adbtouch.ADBtouch" class="doc doc-heading">
+        <code>ADBtouch</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="minidevice.touch.Touch" href="#minidevice.touch.Touch">Touch</a></code>, <code><span title="minidevice.adb.ADB">ADB</span></code></p>
+
+
+
+        <details class="quote">
+          <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\adbtouch.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ADBtouch</span><span class="p">(</span><span class="n">Touch</span><span class="p">,</span> <span class="n">ADB</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        __init__ ADB 操作方式</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device (str): 设备id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ADB</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+        <span class="n">ADB</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ADB click (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) consume:</span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">ms&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
+        <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">end_x</span><span class="p">,</span> <span class="n">end_y</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ADB</span><span class="o">.</span><span class="n">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span><span class="p">,</span> <span class="n">end_x</span><span class="p">,</span> <span class="n">end_y</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ADB swipe from (</span><span class="si">{</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) to (</span><span class="si">{</span><span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">) consume:</span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">ms&quot;</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+        </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="minidevice.adbtouch.ADBtouch.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p><strong>init</strong> ADB 操作方式</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>device</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>设备id</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\adbtouch.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    __init__ ADB 操作方式</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device (str): 设备id</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ADB</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div><pre><code class="language-py">from minidevice import ADBtouch
+#创建操作对象
+touchdevice = ADBtouch(&quot;127.0.0.1:16834&quot;)
+#点击
+touchdevice.click(x=101,y=101,duration=150)
+#长按
+touchdevice.click(x=101,y=101,duration=500)
+#滑动
+touchdevice.swipe([(100,100),(500,500)])
+</code></pre>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="minidevice.scrcpytouch"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="minidevice.scrcpytouch.ScrcpyTouch" class="doc doc-heading">
+        <code>ScrcpyTouch</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="touch.Touch">Touch</span></code></p>
+
+
+
+        <details class="quote">
+          <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\scrcpytouch.py</code></summary>
+          <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ScrcpyTouch</span><span class="p">(</span><span class="n">Touch</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">Client</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        __init__ ScrcpyCap</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device: scrcpy.Client</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">device</span>
+
+    <span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">touch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">ACTION_DOWN</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">touch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">ACTION_UP</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">swipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">touch</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">ACTION_DOWN</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">touch</span><span class="p">(</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">ACTION_MOVE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">touch</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">ACTION_UP</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+        </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="minidevice.scrcpytouch.ScrcpyTouch.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p><strong>init</strong> ScrcpyCap</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>device</code></td>
+          <td>
+                <code>scrcpy.<span title="scrcpy.Client">Client</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>scrcpy.Client</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>C:\Users\alex\Desktop\Code\Python\minidevice\minidevice\scrcpytouch.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">scrcpy</span><span class="o">.</span><span class="n">Client</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    __init__ ScrcpyCap</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device: scrcpy.Client</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">device</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div><pre><code class="language-py">from minidevice import ScrcpyTouch
+import scrcpy
+#创建操作对象
+device=scrcpy.Client(&quot;127.0.0.1:16834&quot;)
+touchdevice = ScrcpyTouch(device)
+#点击
+touchdevice.click(x=101,y=101,duration=150)
+#长按
+touchdevice.click(x=101,y=101,duration=500)
+#滑动
+touchdevice.swipe([(100,100),(500,500)])
+</code></pre>
 
 
 

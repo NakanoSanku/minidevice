@@ -12,6 +12,13 @@ APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.0.apk"
 
 class DroidCast(ScreenCap):
     def __init__(self, device, DroidCastServerPort=53516) -> None:
+        """
+        __init__ DroidCast截图方法
+
+        Args:
+            device (str): 设备id
+            DroidCastServerPort (int, optional): DroidCastServerPort服务端端口号. Defaults to 53516.
+        """
         self.droidcast_adb = ADB(device)
         self.DroidCastServerPort = DroidCastServerPort
         self.class_path = APK_ANDROID_PATH 

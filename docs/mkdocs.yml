@@ -6,7 +6,6 @@ theme:
 nav:
 - Home: index.md
 - Documents:
-    - images: images.md
     - screencap: screencap.md
     - touch: touch.md
 

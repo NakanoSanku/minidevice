@@ -198,22 +198,27 @@ class Minicap(ScreenCap):
     def __init__(
         self,
         device,
-        minicap_name=None,
         rate=15,
         quality=100,
         use_stream=True,
-        ip="127.0.0.1",
     ) -> None:
+        """
+        __init__ minicap截图方式
+
+        Args:
+            device (str): 设备id
+            rate (int, optional): 截图帧率. Defaults to 15.
+            quality (int, optional): 截图品质1~100之间. Defaults to 100.
+            use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
+        """
         self.minicap_adb = ADB(device)
         self.use_stream = use_stream
         self.__get_device_info()
-        if minicap_name is None:
-            minicap_name = "minicap_{}".format(time.time())
+        minicap_name = "minicap_{}".format(time.time())
         minicap_params = {
             "minicap_name": minicap_name,
             "rate": rate,
             "quality": quality,
-            "ip": ip,
         }
         self.__get_minicap_params(**minicap_params)
         if self.use_stream:
@@ -290,7 +295,6 @@ class Minicap(ScreenCap):
 
     @__minicap_available
     def __start_minicap(self):
-        """启动adb"""
         adb_command = [ADB_PATH]
         if self.minicap_adb.device is not None:
             adb_command.extend(["-s", self.minicap_adb.device])
@@ -310,7 +314,6 @@ class Minicap(ScreenCap):
         return True
 
     def __forward_minicap(self):
-        """端口转发"""
         self.minicap_port = self.minicap_adb.forward_port(
             "localabstract:{}".format(self.minicap_name)
         )

@@ -10,7 +10,7 @@
       
       
       
-        <link rel="next" href="images/">
+        <link rel="next" href="screencap/">
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
@@ -230,8 +230,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#qa" class="md-nav__link">
+    Q&amp;A
   </a>
   
 </li>
@@ -272,20 +272,6 @@
           Documents
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="images/" class="md-nav__link">
-        images
-      </a>
-    </li>
-  
-
-            
           
             
               
@@ -362,8 +348,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#qa" class="md-nav__link">
+    Q&amp;A
   </a>
   
 </li>
@@ -391,56 +377,38 @@
 <h2 id="project-structure">Project Structure</h2>
 <ul>
 <li>MiniDevice<ul>
-<li>images</li>
-<li>device<ul>
 <li>screencap<ul>
 <li>Minicap</li>
 <li>ADBcap</li>
 <li>DroidCast</li>
+<li>ScrcpyCap</li>
 </ul>
 </li>
 <li>touch<ul>
 <li>Minitouch</li>
 <li>ADBtouch</li>
+<li>ScrcpyTouch</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-</li>
+<p>阅读下面部分之前先阅读API文档</p>
+<h2 id="qa">Q&amp;A</h2>
+<p>Q: 设备id是什么</p>
+<p>A: adb devices 每行的第一个字段</p>
+<p>Q: scrcpy.Client是什么</p>
+<p>A: 通过scrcpy.Client()创建的对象</p>
+<blockquote>
+<p>具体参考 https://github.com/leng-yue/py-scrcpy-client</p>
+</blockquote>
+<p>scrcpy.Client()简要参数说明</p>
+<ul>
+<li>device 设备id</li>
+<li>max_width 最大宽度</li>
+<li>bitrate 码率</li>
+<li>max_fps 最大帧率</li>
 </ul>
-<h2 id="features">Features</h2>
-<table>
-<thead>
-<tr>
-<th>功能</th>
-<th>函数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>找色</td>
-<td>Images.find_color</td>
-</tr>
-<tr>
-<td>找色(all)</td>
-<td>Images.find_all_colors</td>
-</tr>
-<tr>
-<td>多点找色</td>
-<td>Images.find_multi_colors</td>
-</tr>
-<tr>
-<td>找图</td>
-<td>Images.find_image</td>
-</tr>
-<tr>
-<td>特征匹配</td>
-<td>Images.match_features</td>
-</tr>
-</tbody>
-</table>
-<p>具体使用参考api文档具体内容</p>
 
 
 

@@ -1,32 +1,17 @@
 import time
-import cv2
 import scrcpy
-from screencap import ScreenCap
 from touch import Touch
 
 
-class ScrcpyCap(ScreenCap):
+class ScrcpyTouch(Touch):
     def __init__(self, device: scrcpy.Client) -> None:
         """
         __init__ ScrcpyCap
 
         Args:
             device: scrcpy.Client
-
+            
         """
-        self.client = device
-
-    def screencap_raw(self) -> bytes:
-        """截图源数据"""
-        _, img_data = cv2.imencode(".png", self.screencap_opencv())
-        return img_data.tobytes()
-
-    def screencap_opencv(self):
-        return self.client.last_frame
-
-
-class ScrcpyTouch(Touch):
-    def __init__(self, device: scrcpy.Client) -> None:
         self.client = device
 
     def click(self, x: int, y: int, duration: int = 100):
