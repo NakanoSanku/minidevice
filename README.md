@@ -6,3 +6,15 @@
 `pip install minidevice`
 ## API文档以及使用说明
 [跳转](https://nakanosanku.github.io/minidevice/)
+## 已知bug
+- [ ] 转发端口清理失败
+## Feature
+- screencap
+    - Minicap
+    - ADBcap
+    - DroidCast
+    - ScrcpyCap
+- touch
+    - Minitouch
+    - ADBtouch
+    - ScrcpyTouch
