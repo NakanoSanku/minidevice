@@ -5,4 +5,4 @@
 ## 安装
 `pip install minidevice`
 ## API文档以及使用说明
-[跳转](nakanosanku.github.io/minidevice/)
+[跳转](https://nakanosanku.github.io/minidevice/)
