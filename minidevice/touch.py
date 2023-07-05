@@ -1,8 +1,8 @@
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 
 
 class Touch(ABC):
-    @abstractclassmethod
+    @abstractmethod
     def click(self, x: int, y: int, duration: int = 100):
         """
         click 点击
@@ -13,7 +13,7 @@ class Touch(ABC):
             duration (int, optional): 持续时间. Defaults to 100.
         """
 
-    @abstractclassmethod
+    @abstractmethod
     def swipe(self, points: list, duration: int = 300):
         """
         swipe 滑动

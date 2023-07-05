@@ -1,6 +1,8 @@
 import time
+
 import cv2
 import scrcpy
+
 from minidevice.screencap import ScreenCap
 
 
@@ -24,4 +26,3 @@ class ScrcpyCap(ScreenCap):
 
     def screencap_opencv(self):
         return self.client.last_frame
-    

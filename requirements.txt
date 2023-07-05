@@ -1,4 +1,0 @@
-pyminitouch
-opencv-python
-scrcpy-client
-requests>=2.31.0

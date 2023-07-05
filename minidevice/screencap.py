@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 import cv2
 import numpy as np
 
@@ -20,5 +21,5 @@ class ScreenCap(ABC):
         Args:
             filename (str, optional): 截图保存路径. Defaults to "screencap.png".
         """
-        with open(filename,"wb") as fp:
+        with open(filename, "wb") as fp:
             fp.write(self.screencap_raw())

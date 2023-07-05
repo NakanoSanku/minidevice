@@ -10,6 +10,7 @@ WORK_DIR = os.path.dirname(__file__)
 APK_PATH = "{}/bin/DroidCast-debug-1.1.0.apk".format(WORK_DIR)
 APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.0.apk"
 
+
 class DroidCast(ScreenCap):
     def __init__(self, device, DroidCastServerPort=53516) -> None:
         """
@@ -21,7 +22,7 @@ class DroidCast(ScreenCap):
         """
         self.droidcast_adb = ADB(device)
         self.DroidCastServerPort = DroidCastServerPort
-        self.class_path = APK_ANDROID_PATH 
+        self.class_path = APK_ANDROID_PATH
         self.DroidCastSession = requests.Session()
         self.__install()
         self.__start()
@@ -42,7 +43,7 @@ class DroidCast(ScreenCap):
         end = out.rfind(postfix)
 
         self.class_path = (
-            "CLASSPATH=" + out[beg + len(prefix) : (end + len(postfix))].strip()
+                "CLASSPATH=" + out[beg + len(prefix): (end + len(postfix))].strip()
         )
         print(self.class_path)
         start_droidcast_cmd = (
@@ -91,4 +92,3 @@ class DroidCast(ScreenCap):
 
     def __del__(self):
         self.__stop()
-    

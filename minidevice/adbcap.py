@@ -1,6 +1,7 @@
-from minidevice.logger import logger
 from minidevice.adb import ADB
+from minidevice.logger import logger
 from minidevice.screencap import ScreenCap
+
 
 class ADBcap(ScreenCap, ADB):
     def __init__(self, device) -> None:

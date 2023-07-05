@@ -5,9 +5,9 @@ import subprocess
 import threading
 import time
 
+from minidevice.QueueUtils import PipeQueue
 from minidevice.adb import ADB, ADB_PATH
 from minidevice.logger import logger
-from minidevice.QueueUtils import PipeQueue
 from minidevice.screencap import ScreenCap
 
 WORK_DIR = os.path.dirname(__file__)
@@ -37,25 +37,25 @@ class Banner:
 
     def __str__(self):
         message = (
-            "Banner [Version="
-            + str(self.Version)
-            + ", length="
-            + str(self.Length)
-            + ", Pid="
-            + str(self.Pid)
-            + ", realWidth="
-            + str(self.RealWidth)
-            + ", realHeight="
-            + str(self.RealHeight)
-            + ", virtualWidth="
-            + str(self.VirtualWidth)
-            + ", virtualHeight="
-            + str(self.VirtualHeight)
-            + ", orientation="
-            + str(self.Orientation)
-            + ", quirks="
-            + str(self.Quirks)
-            + "]"
+                "Banner [Version="
+                + str(self.Version)
+                + ", length="
+                + str(self.Length)
+                + ", Pid="
+                + str(self.Pid)
+                + ", realWidth="
+                + str(self.RealWidth)
+                + ", realHeight="
+                + str(self.RealHeight)
+                + ", virtualWidth="
+                + str(self.VirtualWidth)
+                + ", virtualHeight="
+                + str(self.VirtualHeight)
+                + ", orientation="
+                + str(self.Orientation)
+                + ", quirks="
+                + str(self.Quirks)
+                + "]"
         )
         return message
 
@@ -136,24 +136,24 @@ class MinicapStream:
                         self.banner.Length = bannerLength
                     elif readBannerBytes in [2, 3, 4, 5]:
                         self.banner.Pid += (
-                            chunk[cursor] << ((readBannerBytes - 2) * 8)
-                        ) >> 0
+                                                   chunk[cursor] << ((readBannerBytes - 2) * 8)
+                                           ) >> 0
                     elif readBannerBytes in [6, 7, 8, 9]:
                         self.banner.RealWidth += (
-                            chunk[cursor] << ((readBannerBytes - 6) * 8)
-                        ) >> 0
+                                                         chunk[cursor] << ((readBannerBytes - 6) * 8)
+                                                 ) >> 0
                     elif readBannerBytes in [10, 11, 12, 13]:
                         self.banner.RealHeight += (
-                            chunk[cursor] << ((readBannerBytes - 10) * 8)
-                        ) >> 0
+                                                          chunk[cursor] << ((readBannerBytes - 10) * 8)
+                                                  ) >> 0
                     elif readBannerBytes in [14, 15, 16, 17]:
                         self.banner.VirtualWidth += (
-                            chunk[cursor] << ((readBannerBytes - 14) * 8)
-                        ) >> 0
+                                                            chunk[cursor] << ((readBannerBytes - 14) * 8)
+                                                    ) >> 0
                     elif readBannerBytes in [18, 19, 20, 21]:
                         self.banner.VirtualHeight += (
-                            chunk[cursor] << ((readBannerBytes - 18) * 8)
-                        ) >> 0
+                                                             chunk[cursor] << ((readBannerBytes - 18) * 8)
+                                                     ) >> 0
                     elif readBannerBytes == 22:
                         self.banner.Orientation = chunk[cursor] * 90
                     elif readBannerBytes == 23:
@@ -165,14 +165,14 @@ class MinicapStream:
                 # 读取图片大小数据
                 elif readFrameBytes < 4:
                     frameBodyLength = frameBodyLength + (
-                        (chunk[cursor] << (readFrameBytes * 8)) >> 0
+                            (chunk[cursor] << (readFrameBytes * 8)) >> 0
                     )
                     cursor += 1
                     readFrameBytes += 1
                 # 读取图片内容
                 else:
                     if length - cursor >= frameBodyLength:
-                        dataBody = dataBody + chunk[cursor : (cursor + frameBodyLength)]
+                        dataBody = dataBody + chunk[cursor: (cursor + frameBodyLength)]
                         if dataBody[0] != 0xFF or dataBody[1] != 0xD8:
                             return
                         self.queue.put(dataBody)
@@ -196,11 +196,11 @@ class MinicapStream:
 
 class Minicap(ScreenCap):
     def __init__(
-        self,
-        device,
-        rate=15,
-        quality=100,
-        use_stream=True,
+            self,
+            device,
+            rate=15,
+            quality=100,
+            use_stream=True,
     ) -> None:
         """
         __init__ minicap截图方式
@@ -339,7 +339,8 @@ class Minicap(ScreenCap):
 
     def __del__(self):
         self.__stop_minicap_by_stream()
-        
+
+
 if __name__ == "__main__":
     a = Minicap("127.0.0.1:16384")
     time.sleep(5)

@@ -1,7 +1,8 @@
 import os
 
-from minidevice.adb import ADB
 from pyminitouch import MNTDevice
+
+from minidevice.adb import ADB
 from minidevice.logger import logger
 from minidevice.touch import Touch
 
@@ -42,6 +43,7 @@ class Minitouch(Touch, MNTDevice):
 
     def __del__(self):
         MNTDevice.stop(self)
+
 
 if __name__ == "__main__":
     a = Minitouch("127.0.0.1:16384")

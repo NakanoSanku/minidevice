@@ -1,11 +1,8 @@
+import random
 import shutil
 import subprocess
-import random
+
 from minidevice.logger import logger
-
-
-from minidevice.screencap import ScreenCap
-from minidevice.touch import Touch
 
 ADB_PATH = "adb"
 if shutil.which("adb.exe") is None:
@@ -17,7 +14,10 @@ if shutil.which("adb.exe") is None:
 
 class ADB:
     def __init__(self, device=None):
-        self.device = device
+        if device in self.list_devices():
+            self.device = device
+        else:
+            raise Exception("设备不存在")
 
     def adb_command(self, command: list):
         """执行shell脚本语句,获取返回的源数据"""
@@ -134,8 +134,3 @@ def str_to_dict(str):
             key, value = line.split(":", 1)
             dict_info[key.strip()] = value.strip()
     return dict_info
-
-
-
-
-
