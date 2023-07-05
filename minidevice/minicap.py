@@ -270,7 +270,10 @@ class Minicap(ScreenCap):
                 ]
                 adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
                 adb_command.extend(["-t"])
-                result = self.minicap_adb.adb_command(adb_command).strip()
+                try:
+                    result = self.minicap_adb.adb_command(adb_command).strip()
+                except AttributeError:
+                    return False
                 if "OK" in result.decode("utf-8"):
                     return func(self, *args, **kwargs)
                 return False

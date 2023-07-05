@@ -14,10 +14,9 @@ if shutil.which("adb.exe") is None:
 
 class ADB:
     def __init__(self, device=None):
-        if device in self.list_devices():
-            self.device = device
-        else:
+        if device is not None and device not in self.list_devices():
             raise Exception("设备不存在")
+        self.device = device
 
     def adb_command(self, command: list):
         """执行shell脚本语句,获取返回的源数据"""
