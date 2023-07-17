@@ -34,7 +34,7 @@ class Minitouch(Touch, MNTDevice):
         MNTDevice.tap(self, [(x, y)], duration=duration)
 
     def swipe(self, points: list, duration: int = 300):
-        MNTDevice.swipe(self, points, duration=duration)
+        MNTDevice.swipe(self, points, duration=duration/(len(points)-1))
 
     def __del__(self):
         MNTDevice.stop(self)
