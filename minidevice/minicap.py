@@ -5,9 +5,8 @@ import subprocess
 import threading
 import time
 
+from adbutils import adb,adb_path
 from minidevice.QueueUtils import PipeQueue
-from minidevice.adb import ADB, ADB_PATH
-from minidevice.logger import logger
 from minidevice.screencap import ScreenCap
 
 WORK_DIR = os.path.dirname(__file__)
@@ -37,25 +36,25 @@ class Banner:
 
     def __str__(self):
         message = (
-                "Banner [Version="
-                + str(self.Version)
-                + ", length="
-                + str(self.Length)
-                + ", Pid="
-                + str(self.Pid)
-                + ", realWidth="
-                + str(self.RealWidth)
-                + ", realHeight="
-                + str(self.RealHeight)
-                + ", virtualWidth="
-                + str(self.VirtualWidth)
-                + ", virtualHeight="
-                + str(self.VirtualHeight)
-                + ", orientation="
-                + str(self.Orientation)
-                + ", quirks="
-                + str(self.Quirks)
-                + "]"
+            "Banner [Version="
+            + str(self.Version)
+            + ", length="
+            + str(self.Length)
+            + ", Pid="
+            + str(self.Pid)
+            + ", realWidth="
+            + str(self.RealWidth)
+            + ", realHeight="
+            + str(self.RealHeight)
+            + ", virtualWidth="
+            + str(self.VirtualWidth)
+            + ", virtualHeight="
+            + str(self.VirtualHeight)
+            + ", orientation="
+            + str(self.Orientation)
+            + ", quirks="
+            + str(self.Quirks)
+            + "]"
         )
         return message
 
@@ -136,24 +135,24 @@ class MinicapStream:
                         self.banner.Length = bannerLength
                     elif readBannerBytes in [2, 3, 4, 5]:
                         self.banner.Pid += (
-                                                   chunk[cursor] << ((readBannerBytes - 2) * 8)
-                                           ) >> 0
+                            chunk[cursor] << ((readBannerBytes - 2) * 8)
+                        ) >> 0
                     elif readBannerBytes in [6, 7, 8, 9]:
                         self.banner.RealWidth += (
-                                                         chunk[cursor] << ((readBannerBytes - 6) * 8)
-                                                 ) >> 0
+                            chunk[cursor] << ((readBannerBytes - 6) * 8)
+                        ) >> 0
                     elif readBannerBytes in [10, 11, 12, 13]:
                         self.banner.RealHeight += (
-                                                          chunk[cursor] << ((readBannerBytes - 10) * 8)
-                                                  ) >> 0
+                            chunk[cursor] << ((readBannerBytes - 10) * 8)
+                        ) >> 0
                     elif readBannerBytes in [14, 15, 16, 17]:
                         self.banner.VirtualWidth += (
-                                                            chunk[cursor] << ((readBannerBytes - 14) * 8)
-                                                    ) >> 0
+                            chunk[cursor] << ((readBannerBytes - 14) * 8)
+                        ) >> 0
                     elif readBannerBytes in [18, 19, 20, 21]:
                         self.banner.VirtualHeight += (
-                                                             chunk[cursor] << ((readBannerBytes - 18) * 8)
-                                                     ) >> 0
+                            chunk[cursor] << ((readBannerBytes - 18) * 8)
+                        ) >> 0
                     elif readBannerBytes == 22:
                         self.banner.Orientation = chunk[cursor] * 90
                     elif readBannerBytes == 23:
@@ -165,14 +164,14 @@ class MinicapStream:
                 # 读取图片大小数据
                 elif readFrameBytes < 4:
                     frameBodyLength = frameBodyLength + (
-                            (chunk[cursor] << (readFrameBytes * 8)) >> 0
+                        (chunk[cursor] << (readFrameBytes * 8)) >> 0
                     )
                     cursor += 1
                     readFrameBytes += 1
                 # 读取图片内容
                 else:
                     if length - cursor >= frameBodyLength:
-                        dataBody = dataBody + chunk[cursor: (cursor + frameBodyLength)]
+                        dataBody = dataBody + chunk[cursor : (cursor + frameBodyLength)]
                         if dataBody[0] != 0xFF or dataBody[1] != 0xD8:
                             return
                         self.queue.put(dataBody)
@@ -196,44 +195,36 @@ class MinicapStream:
 
 class Minicap(ScreenCap):
     def __init__(
-            self,
-            device,
-            rate=15,
-            quality=100,
-            use_stream=True,
+        self,
+        serial,
+        rate=15,
+        quality=100,
+        use_stream=True,
     ) -> None:
         """
         __init__ minicap截图方式
 
         Args:
-            device (str): 设备id
+            serial (str): 设备id
             rate (int, optional): 截图帧率. Defaults to 15.
             quality (int, optional): 截图品质1~100之间. Defaults to 100.
             use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
         """
-        self.minicap_adb = ADB(device)
+        self.adb = adb.device(serial)
         self.use_stream = use_stream
+        self.quality = quality
+        self.rate = rate
         self.__get_device_info()
-        minicap_name = "minicap_{}".format(time.time())
-        minicap_params = {
-            "minicap_name": minicap_name,
-            "rate": rate,
-            "quality": quality,
-        }
-        self.__get_minicap_params(**minicap_params)
         if self.use_stream:
             self.__start_minicap_by_stream()
 
     def screencap_raw(self) -> bytes:
         if self.use_stream:
             if self.minicap_popen.poll() is not None:
-                logger.warning("尝试重启minicap中")
                 self.__stop_minicap_by_stream()
                 self.__start_minicap_by_stream()
-            logger.debug("screen by minicap stream")
             return self.screen_queue.get()
         else:
-            logger.debug("screen by minicap frame")
             return self.__minicap_frame()
 
     def __minicap_frame(self):
@@ -245,37 +236,29 @@ class Minicap(ScreenCap):
         adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
         adb_command.extend(["-Q", str(self.quality)])
         adb_command.extend(["-s"])
-        raw_data = self.minicap_adb.adb_command(adb_command)
+        raw_data = self.adb.shell(adb_command)
         jpg_data = raw_data.split(b"for JPG encoder\n" + line_breaker(self.sdk))[-1]
         jpg_data = jpg_data.replace(line_breaker(self.sdk), b"\n")
         return jpg_data
 
     def __get_device_info(self):
-        self.vm_size = self.minicap_adb.get_screen_resolution()
-        self.abi = self.minicap_adb.get_abi()
-        self.sdk = self.minicap_adb.get_sdk()
-
-    def __get_minicap_params(self, minicap_name, quality, rate):
-        self.minicap_name = minicap_name
-        self.quality = quality
-        self.rate = rate
+        self.vm_size = f"{self.adb.window_size().height}x{self.adb.window_size().width}"
+        self.abi = self.adb.getprop("ro.product.cpu.abi")
+        self.sdk = self.adb.getprop("ro.build.version.sdk")
 
     def __minicap_available(func):
         def wrapper(self, *args, **kwargs):
             try:
                 adb_command = [
-                    "shell",
                     "LD_LIBRARY_PATH=/data/local/tmp",
                     "/data/local/tmp/minicap",
                 ]
                 adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
                 adb_command.extend(["-t"])
-                try:
-                    result = self.minicap_adb.adb_command(adb_command).strip()
-                except AttributeError:
-                    return False
-                if "OK" in result.decode("utf-8"):
+                result = self.adb.shell(adb_command)
+                if "OK" in result:
                     return func(self, *args, **kwargs)
+                print(result)
                 return False
             except subprocess.CalledProcessError:
                 return False
@@ -283,27 +266,25 @@ class Minicap(ScreenCap):
         return wrapper
 
     def __minicap_install(self):
-        if self.sdk == 32 and self.abi == "x86_64":
+        if str(self.sdk) == "32" and str(self.abi) == "x86_64":
             self.abi = "x86"
-
         MNC_HOME = "/data/local/tmp/minicap"
         MNC_SO_HOME = "/data/local/tmp/minicap.so"
 
-        self.minicap_adb.push_file(f"{MINICAP_PATH}/{self.abi}/minicap", MNC_HOME)
-        self.minicap_adb.push_file(
+        self.adb.sync.push(f"{MINICAP_PATH}/{self.abi}/minicap", MNC_HOME)
+        self.adb.sync.push(
             f"{MINICAPSO_PATH}/android-{self.sdk}/{self.abi}/minicap.so", MNC_SO_HOME
         )
-        self.minicap_adb.change_file_permission("+x", MNC_HOME)
+        self.adb.shell(["chmod +x", MNC_HOME])
 
     @__minicap_available
     def __start_minicap(self):
-        adb_command = [ADB_PATH]
-        if self.minicap_adb.device is not None:
-            adb_command.extend(["-s", self.minicap_adb.device])
+        adb_command = [adb_path()]
+        if self.adb.serial is not None:
+            adb_command.extend(["-s", self.adb.serial])
         adb_command.extend(
             ["shell", "LD_LIBRARY_PATH=/data/local/tmp", "/data/local/tmp/minicap"]
         )
-        adb_command.extend(["-n", f"{self.minicap_name}"])
         adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
         adb_command.extend(["-Q", str(self.quality)])
         adb_command.extend(["-r", str(self.rate)])
@@ -312,13 +293,10 @@ class Minicap(ScreenCap):
             adb_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
         time.sleep(2)
-        logger.info("启动minicap")
         return True
 
     def __forward_minicap(self):
-        self.minicap_port = self.minicap_adb.forward_port(
-            "localabstract:{}".format(self.minicap_name)
-        )
+        self.minicap_port = self.adb.forward_port("localabstract:minicap")
 
     def __read_minicap_stream(self):
         self.minicap_stream = MinicapStream.getBuilder("127.0.0.1", self.minicap_port)
@@ -336,7 +314,6 @@ class Minicap(ScreenCap):
 
     def __stop_minicap_by_stream(self):
         self.minicap_stream.stop()  # 停止stream
-        # self.minicap_adb.remove_forward(self.minicap_port)  # 清理端口
         if self.minicap_popen.poll() is None:  # 清理管道
             self.minicap_popen.kill()
 
@@ -344,10 +321,4 @@ class Minicap(ScreenCap):
         self.__stop_minicap_by_stream()
 
 
-if __name__ == "__main__":
-    a = Minicap("127.0.0.1:16384")
-    time.sleep(5)
-    import cv2
 
-    cv2.imshow("", a.screencap_opencv())
-    cv2.waitKey()

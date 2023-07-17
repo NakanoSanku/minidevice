@@ -2,8 +2,8 @@ import os
 import subprocess
 
 import requests
+from adbutils import adb, adb_path
 
-from minidevice.adb import ADB, ADB_PATH
 from minidevice.screencap import ScreenCap
 
 WORK_DIR = os.path.dirname(__file__)
@@ -12,50 +12,33 @@ APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.0.apk"
 
 
 class DroidCast(ScreenCap):
-    def __init__(self, device, DroidCastServerPort=53516) -> None:
+    def __init__(self, device) -> None:
         """
         __init__ DroidCast截图方法
 
         Args:
             device (str): 设备id
-            DroidCastServerPort (int, optional): DroidCastServerPort服务端端口号. Defaults to 53516.
+
         """
-        self.droidcast_adb = ADB(device)
-        self.DroidCastServerPort = DroidCastServerPort
+        self.adb = adb.device(device)
         self.class_path = APK_ANDROID_PATH
         self.DroidCastSession = requests.Session()
         self.__install()
         self.__start()
 
     def __install(self):
-        self.droidcast_adb.push_file(APK_PATH, self.class_path)
-        self.droidcast_adb.install_apk(APK_PATH)
+        if "com.rayworks.droidcast" not in self.adb.list_packages():
+            self.adb.install(APK_PATH, nolaunch=True)
 
     def __start_droidcast(self):
-        out = str(
-            self.droidcast_adb.adb_command(
-                ["shell", "pm", "path", "com.rayworks.droidcast"]
-            )
-        )
-        prefix = "package:"
-        postfix = ".apk"
-        beg = out.index(prefix, 0)
-        end = out.rfind(postfix)
-
-        self.class_path = (
-                "CLASSPATH=" + out[beg + len(prefix): (end + len(postfix))].strip()
-        )
-        print(self.class_path)
-        start_droidcast_cmd = (
-            "exec app_process / com.rayworks.droidcast.Main --port={}".format(
-                self.DroidCastServerPort
-            )
-        )
+        out = self.adb.shell("pm path com.rayworks.droidcast")
+        self.class_path = "CLASSPATH=" + out.split(":")[1]
+        start_droidcast_cmd = "exec app_process / com.rayworks.droidcast.Main"
         self.droidcast_popen = subprocess.Popen(
             [
-                ADB_PATH,
+                adb_path(),
                 "-s",
-                self.droidcast_adb.device,
+                self.adb.serial,
                 "shell",
                 self.class_path,
                 start_droidcast_cmd,
@@ -65,14 +48,8 @@ class DroidCast(ScreenCap):
         )
 
     def __forward_port(self):
-        self.droidcast_port = self.droidcast_adb.forward_port(
-            "tcp:{}".format(self.DroidCastServerPort)
-        )
-        self.droidcast_url = "http://localhost:{}/screenshot".format(
-            self.droidcast_port
-        )
-        print(self.droidcast_adb.list_forward_port())
-        print(self.droidcast_url)
+        self.droidcast_port = self.adb.forward_port(53516)
+        self.droidcast_url = f"http://localhost:{self.droidcast_port}/screenshot"
 
     def __start(self):
         self.__start_droidcast()
@@ -92,3 +69,6 @@ class DroidCast(ScreenCap):
 
     def __del__(self):
         self.__stop()
+
+    def __str__(self) -> str:
+        return "DroidCast-url:{}".format(self.droidcast_url)
