@@ -1,7 +1,9 @@
 # minidevice
 一个对安卓设备(主要是安卓模拟器)进行基础操作的工具包
+## 更新日志
+2023.8.10 移除opencv库的引用，让用户自行处理截图源数据byte,以此减少库依赖(opencv，numpy库真的很大且并非所有人都需要)
 ## requirements
-`opencv-python` [`pyminitouch`](https://github.com/williamfzc/pyminitouch)
+[`pyminitouch`](https://github.com/williamfzc/pyminitouch) `adbutils==1.2.9`
 ## 安装
 `pip install minidevice`
 ## API文档以及使用说明

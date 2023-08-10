@@ -2,3 +2,4 @@ build
 dist
 minidevice.egg-info
 .idea
+__pycache__

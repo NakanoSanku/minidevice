@@ -20,7 +20,14 @@ class Minitouch(Touch, MNTDevice):
         self.adb = adb.device(serial)
         self.__get_device_info()
         self.__minitouch_install()
+        self.__kill_minitouch()
         MNTDevice.__init__(self, serial)
+        
+    def __kill_minitouch(self):
+        pid = self.adb.shell(['pidof', 'minitouch']).strip()
+        if pid:
+            self.adb.shell(['kill', pid])
+    
 
     def __get_device_info(self):
         self.abi = self.adb.getprop("ro.product.cpu.abi")
