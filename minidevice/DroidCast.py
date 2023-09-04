@@ -7,8 +7,8 @@ from adbutils import adb, adb_path
 from minidevice.screencap import ScreenCap
 
 WORK_DIR = os.path.dirname(__file__)
-APK_PATH = "{}/bin/DroidCast-debug-1.1.0.apk".format(WORK_DIR)
-APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.0.apk"
+APK_PATH = "{}/bin/DroidCast-debug-1.1.1.apk".format(WORK_DIR)
+APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.1.1.apk"
 
 
 class DroidCast(ScreenCap):
