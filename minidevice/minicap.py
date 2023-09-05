@@ -242,7 +242,7 @@ class Minicap(ScreenCap):
         return jpg_data
 
     def __get_device_info(self):
-        self.vm_size = f"{self.adb.window_size().width}x{self.adb.window_size().height}"
+        self.vm_size = self.adb.shell("wm size").split(" ")[-1]
         self.abi = self.adb.getprop("ro.product.cpu.abi")
         self.sdk = self.adb.getprop("ro.build.version.sdk")
 
