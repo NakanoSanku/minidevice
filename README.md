@@ -1,25 +1,37 @@
 # minidevice
 一个对安卓设备(主要是安卓模拟器)进行基础操作的工具包
 ## 更新日志
-2023.8.10 移除opencv库的引用，让用户自行处理截图源数据byte,以此减少库依赖(opencv，numpy库真的很大且并非所有人都需要)
+### 2023.12.2 
+更新README说明
+### 2023.8.10 
+移除opencv库的引用，让用户自行处理截图源数据bytes,以此减少库依赖(opencv，numpy库真的很大且并非所有人都需要)
 ## requirements
 [`pyminitouch`](https://github.com/williamfzc/pyminitouch) `adbutils==1.2.9`
 ## 安装
 `pip install minidevice`
 ## API文档以及使用说明
-[跳转](https://nakanosanku.github.io/minidevice/)
-## 已知bug
-- [ ] 转发端口清理失败
-## Feature
-- screencap
+大致设计思路就是通过实现`ScreenCap`和`Touch`这两个抽象基类
+1. ScreenCap 
+- @abstractmethod screencap_raw 返回截图bytes数据
+- save_screencap(path) 保存截图到path 
+2. Touch
+- @abstractmethod click(x,y,duration) 
+- @abstractmethod swipe(points,duraiton)
+
+> User无需关心具体实现过程，Developer直接继承基类即可添加新方法
+
+### 已实现的特性
+- ScreenCap
     - Minicap
     - ADBcap
     - DroidCast
 
-- touch
+- Touch
     - Minitouch
     - ADBtouch
-
+## 已知bug
+- [ ] 转发端口清理失败
+- [ ] pyminitouch库使用系统路径的adb，导致需用户自行安装adb工具并添加到环境变量中
 ## 性能排序
 ### 截图
 Minicap>>DroidCast>>ADBcap
