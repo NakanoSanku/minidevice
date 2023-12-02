@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Touch(ABC):
+    
     @abstractmethod
     def click(self, x: int, y: int, duration: int = 100):
         """
@@ -12,7 +13,7 @@ class Touch(ABC):
             y (int): 纵坐标
             duration (int, optional): 持续时间. Defaults to 100.
         """
-
+        
     @abstractmethod
     def swipe(self, points: list, duration: int = 300):
         """

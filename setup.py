@@ -4,7 +4,7 @@ with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
 
 setup(name='minidevice',
-      version='2.2.2',
+      version='2.2.4',
       description='Android Auto Pypi',
       author='KateTseng',
       author_email='Kate.TsengK@outlook.com',
@@ -12,7 +12,7 @@ setup(name='minidevice',
       long_description_content_type="text/markdown",
       url='https://github.com/NakanoSanku/minidevice',
       license='MIT',
-      keywords='game',
+      keywords='Android',
       project_urls={},
       packages=find_packages(),
       include_package_data=True,

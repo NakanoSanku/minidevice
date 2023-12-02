@@ -210,20 +210,20 @@ class Minicap(ScreenCap):
             quality (int, optional): 截图品质1~100之间. Defaults to 100.
             use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
         """
-        self.adb = adb.device(serial)
-        self.use_stream = use_stream
-        self.quality = quality
-        self.rate = rate
+        self.__adb = adb.device(serial)
+        self.__use_stream = use_stream
+        self.__quality = quality
+        self.__rate = rate
         self.__get_device_info()
-        if self.use_stream:
+        if self.__use_stream:
             self.__start_minicap_by_stream()
 
     def screencap_raw(self) -> bytes:
-        if self.use_stream:
-            if self.minicap_popen.poll() is not None:
+        if self.__use_stream:
+            if self.__minicap_popen.poll() is not None:
                 self.__stop_minicap_by_stream()
                 self.__start_minicap_by_stream()
-            return self.screen_queue.get()
+            return self.__screen_queue.get()
         else:
             return self.__minicap_frame()
 
@@ -233,18 +233,18 @@ class Minicap(ScreenCap):
             "LD_LIBRARY_PATH=/data/local/tmp",
             "/data/local/tmp/minicap",
         ]
-        adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
-        adb_command.extend(["-Q", str(self.quality)])
+        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/0"])
+        adb_command.extend(["-Q", str(self.__quality)])
         adb_command.extend(["-s"])
-        raw_data = self.adb.shell(adb_command)
-        jpg_data = raw_data.split(b"for JPG encoder\n" + line_breaker(self.sdk))[-1]
-        jpg_data = jpg_data.replace(line_breaker(self.sdk), b"\n")
+        raw_data = self.__adb.shell(adb_command)
+        jpg_data = raw_data.split(b"for JPG encoder\n" + line_breaker(self.__sdk))[-1]
+        jpg_data = jpg_data.replace(line_breaker(self.__sdk), b"\n")
         return jpg_data
 
     def __get_device_info(self):
-        self.vm_size = self.adb.shell("wm size").split(" ")[-1]
-        self.abi = self.adb.getprop("ro.product.cpu.abi")
-        self.sdk = self.adb.getprop("ro.build.version.sdk")
+        self.__vm_size = self.__adb.shell("wm size").split(" ")[-1]
+        self.__abi = self.__adb.getprop("ro.product.cpu.abi")
+        self.__sdk = self.__adb.getprop("ro.build.version.sdk")
 
     def __minicap_available(func):
         def wrapper(self, *args, **kwargs):
@@ -253,9 +253,9 @@ class Minicap(ScreenCap):
                     "LD_LIBRARY_PATH=/data/local/tmp",
                     "/data/local/tmp/minicap",
                 ]
-                adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
+                adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/0"])
                 adb_command.extend(["-t"])
-                result = self.adb.shell(adb_command)
+                result = self.__adb.shell(adb_command)
                 if "OK" in result:
                     return func(self, *args, **kwargs)
                 print(result)
@@ -266,43 +266,43 @@ class Minicap(ScreenCap):
         return wrapper
 
     def __minicap_install(self):
-        if str(self.sdk) == "32" and str(self.abi) == "x86_64":
-            self.abi = "x86"
+        if str(self.__sdk) == "32" and str(self.__abi) == "x86_64":
+            self.__abi = "x86"
         MNC_HOME = "/data/local/tmp/minicap"
         MNC_SO_HOME = "/data/local/tmp/minicap.so"
 
-        self.adb.sync.push(f"{MINICAP_PATH}/{self.abi}/minicap", MNC_HOME)
-        self.adb.sync.push(
-            f"{MINICAPSO_PATH}/android-{self.sdk}/{self.abi}/minicap.so", MNC_SO_HOME
+        self.__adb.sync.push(f"{MINICAP_PATH}/{self.__abi}/minicap", MNC_HOME)
+        self.__adb.sync.push(
+            f"{MINICAPSO_PATH}/android-{self.__sdk}/{self.__abi}/minicap.so", MNC_SO_HOME
         )
-        self.adb.shell(["chmod +x", MNC_HOME])
+        self.__adb.shell(["chmod +x", MNC_HOME])
 
     @__minicap_available
     def __start_minicap(self):
         adb_command = [adb_path()]
-        if self.adb.serial is not None:
-            adb_command.extend(["-s", self.adb.serial])
+        if self.__adb.serial is not None:
+            adb_command.extend(["-s", self.__adb.serial])
         adb_command.extend(
             ["shell", "LD_LIBRARY_PATH=/data/local/tmp", "/data/local/tmp/minicap"]
         )
-        adb_command.extend(["-P", f"{self.vm_size}@{self.vm_size}/0"])
-        adb_command.extend(["-Q", str(self.quality)])
-        adb_command.extend(["-r", str(self.rate)])
+        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/0"])
+        adb_command.extend(["-Q", str(self.__quality)])
+        adb_command.extend(["-r", str(self.__rate)])
         adb_command.extend(["-S"])
-        self.minicap_popen = subprocess.Popen(
+        self.__minicap_popen = subprocess.Popen(
             adb_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
         time.sleep(2)
         return True
 
     def __forward_minicap(self):
-        self.minicap_port = self.adb.forward_port("localabstract:minicap")
+        self.minicap_port = self.__adb.forward_port("localabstract:minicap")
 
     def __read_minicap_stream(self):
-        self.minicap_stream = MinicapStream.getBuilder("127.0.0.1", self.minicap_port)
-        self.minicap_stream.run()
-        self.banner = self.minicap_stream.banner
-        self.screen_queue = self.minicap_stream.queue
+        self.__minicap_stream = MinicapStream.getBuilder("127.0.0.1", self.minicap_port)
+        self.__minicap_stream.run()
+        self.__banner = self.__minicap_stream.banner
+        self.__screen_queue = self.__minicap_stream.queue
 
     def __start_minicap_by_stream(self):
         if not self.__start_minicap():
@@ -313,12 +313,11 @@ class Minicap(ScreenCap):
         self.__read_minicap_stream()
 
     def __stop_minicap_by_stream(self):
-        self.minicap_stream.stop()  # 停止stream
-        if self.minicap_popen.poll() is None:  # 清理管道
-            self.minicap_popen.kill()
+        self.__minicap_stream.stop()  # 停止stream
+        if self.__minicap_popen.poll() is None:  # 清理管道
+            self.__minicap_popen.kill()
 
     def __del__(self):
         self.__stop_minicap_by_stream()
-
 
 

@@ -12,7 +12,7 @@ APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.1.1.apk"
 
 
 class DroidCast(ScreenCap):
-    def __init__(self, device) -> None:
+    def __init__(self, serial) -> None:
         """
         __init__ DroidCast截图方法
 
@@ -20,27 +20,27 @@ class DroidCast(ScreenCap):
             device (str): 设备id
 
         """
-        self.adb = adb.device(device)
-        self.class_path = APK_ANDROID_PATH
-        self.DroidCastSession = requests.Session()
+        self.__adb = adb.device(serial)
+        self.__class_path = APK_ANDROID_PATH
+        self.__droidcast_session = requests.Session()
         self.__install()
         self.__start()
 
     def __install(self):
-        if "com.rayworks.droidcast" not in self.adb.list_packages():
-            self.adb.install(APK_PATH, nolaunch=True)
+        if "com.rayworks.droidcast" not in self.__adb.list_packages():
+            self.__adb.install(APK_PATH, nolaunch=True)
 
     def __start_droidcast(self):
-        out = self.adb.shell("pm path com.rayworks.droidcast")
-        self.class_path = "CLASSPATH=" + out.split(":")[1]
+        out = self.__adb.shell("pm path com.rayworks.droidcast")
+        self.__class_path = "CLASSPATH=" + out.split(":")[1]
         start_droidcast_cmd = "exec app_process / com.rayworks.droidcast.Main"
         self.droidcast_popen = subprocess.Popen(
             [
                 adb_path(),
                 "-s",
-                self.adb.serial,
+                self.__adb.serial,
                 "shell",
-                self.class_path,
+                self.__class_path,
                 start_droidcast_cmd,
             ],
             stderr=subprocess.DEVNULL,
@@ -48,8 +48,8 @@ class DroidCast(ScreenCap):
         )
 
     def __forward_port(self):
-        self.droidcast_port = self.adb.forward_port(53516)
-        self.droidcast_url = f"http://localhost:{self.droidcast_port}/screenshot"
+        self.__droidcast_port = self.__adb.forward_port(53516)
+        self.__droidcast_url = f"http://localhost:{self.__droidcast_port}/screenshot"
 
     def __start(self):
         self.__start_droidcast()
@@ -65,10 +65,11 @@ class DroidCast(ScreenCap):
         if self.droidcast_popen.poll() is not None:
             self.__stop()
             self.__start()
-        return self.DroidCastSession.get(self.droidcast_url, timeout=3).content
+        return self.__droidcast_session.get(self.__droidcast_url, timeout=3).content
 
     def __del__(self):
         self.__stop()
 
     def __str__(self) -> str:
-        return "DroidCast-url:{}".format(self.droidcast_url)
+        return "DroidCast-url:{}".format(self.__droidcast_url)
+

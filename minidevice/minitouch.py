@@ -17,25 +17,25 @@ class Minitouch(Touch, MNTDevice):
         Args:
             device (str): 设备id
         """
-        self.adb = adb.device(serial)
+        self.__adb = adb.device(serial)
         self.__get_device_info()
         self.__minitouch_install()
         self.__kill_minitouch()
         MNTDevice.__init__(self, serial)
         
     def __kill_minitouch(self):
-        pid = self.adb.shell(['pidof', 'minitouch']).strip()
+        pid = self.__adb.shell(['pidof', 'minitouch']).strip()
         if pid:
-            self.adb.shell(['kill', pid])
+            self.__adb.shell(['kill', pid])
     
 
     def __get_device_info(self):
-        self.abi = self.adb.getprop("ro.product.cpu.abi")
+        self.__abi = self.__adb.getprop("ro.product.cpu.abi")
 
     def __minitouch_install(self):
         MNT_HOME = "/data/local/tmp/minitouch"
-        self.adb.sync.push(f"{MINITOUCH_PATH}/{self.abi}/minitouch", MNT_HOME)
-        self.adb.shell(f"chmod +x {MNT_HOME}")
+        self.__adb.sync.push(f"{MINITOUCH_PATH}/{self.__abi}/minitouch", MNT_HOME)
+        self.__adb.shell(f"chmod +x {MNT_HOME}")
 
     def click(self, x: int, y: int, duration: int = 100):
         MNTDevice.tap(self, [(x, y)], duration=duration)

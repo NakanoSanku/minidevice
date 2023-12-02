@@ -5,3 +5,4 @@ minidevice.egg-info
 __pycache__
 main.py
 screencap.png
+*.png

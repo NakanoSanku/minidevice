@@ -11,10 +11,10 @@ class ADBcap(ScreenCap):
         Args:
             serial (str): 设备id
         """
-        self.adb = adb.device(serial)
+        self.__adb = adb.device(serial)
 
     def screencap_raw(self) -> bytes:
-        adb_command = [adb_path(), "-s", self.adb.serial, "exec-out", "screencap", "-p"]
+        adb_command = [adb_path(), "-s", self.__adb.serial, "exec-out", "screencap", "-p"]
         process = subprocess.Popen(
             adb_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )

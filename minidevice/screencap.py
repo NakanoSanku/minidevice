@@ -3,10 +3,11 @@ from abc import ABC, abstractmethod
 
 
 class ScreenCap(ABC):
+    
     @abstractmethod
     def screencap_raw(self) -> bytes:
         """截图源数据"""
-
+        
     def save_screencap(self, filename="screencap.png"):
         """
         save_screencap 保存截图
