@@ -2,7 +2,7 @@
 一个对安卓设备(主要是安卓模拟器)进行基础操作的工具包
 ## 更新日志
 ### 2023.12.2 
-更新README说明
+更新README说明,添加[MiniDevice](./minidevice/device.py)类
 ### 2023.8.10 
 移除opencv库的引用，让用户自行处理截图源数据bytes,以此减少库依赖(opencv，numpy库真的很大且并非所有人都需要)
 ## requirements
@@ -18,6 +18,7 @@
 - @abstractmethod click(x,y,duration) 
 - @abstractmethod swipe(points,duraiton)
 
+整合至MiniDevice类创建对安卓设备操作的对象,引入基础操作锁，防止不合理并发导致的程序错误
 > User无需关心具体实现过程，Developer直接继承基类即可添加新方法
 
 ### 已实现的特性
