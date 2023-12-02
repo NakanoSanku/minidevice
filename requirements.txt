@@ -1,0 +1,2 @@
+pyminitouch
+adbutils==1.2.9
