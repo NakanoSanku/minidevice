@@ -4,7 +4,7 @@ import subprocess
 import requests
 from adbutils import adb, adb_path
 
-from minidevice.screencap import ScreenCap
+from minidevice import ScreenCap
 
 WORK_DIR = os.path.dirname(__file__)
 APK_PATH = "{}/bin/DroidCast-debug-1.1.1.apk".format(WORK_DIR)

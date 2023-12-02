@@ -3,7 +3,7 @@ import os
 from adbutils import adb
 from pyminitouch import MNTDevice
 
-from minidevice.touch import Touch
+from minidevice import Touch
 
 WORK_DIR = os.path.dirname(__file__)
 MINITOUCH_PATH = "{}/bin/minitouch/libs".format(WORK_DIR)
