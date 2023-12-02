@@ -18,10 +18,16 @@ class MiniDevice:
             screenshotTimeout (int, optional):截图延迟，每张截图之间的延迟时间(包含截图过程) 单位ms. Defaults to 500.
         """
         self.__serial = serial
-        if not issubclass(capMethod,ScreenCap):
-            raise TypeError(f"{capMethod.__name__} is not a subclass of {ScreenCap.__name__}")
-        if not issubclass(touchMethod,Touch):
-            raise TypeError(f"{touchMethod.__name__} is not a subclass of {Touch.__name__}")
+        # TypeError: issubclass() arg 1 must be a class
+        def typeAndClassCheck(method,superClass):
+            if method:
+                if isinstance(method,type):
+                    if not issubclass(method,superClass):
+                        raise TypeError(f"{method.__name__} is not a subclass of {superClass.__name__}")
+                else:
+                    raise TypeError(f"{capMethod.__name__} is not a class")
+        typeAndClassCheck(capMethod,ScreenCap)
+        typeAndClassCheck(touchMethod,Touch)
         self.__capMethod = capMethod(serial) if capMethod else None
         self.__touchMethod = touchMethod(serial) if touchMethod else None
         self.__touchThreadLock = None # 操作线程锁
