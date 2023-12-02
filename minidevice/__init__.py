@@ -6,3 +6,4 @@ from minidevice.minitouch import Minitouch
 from minidevice.screencap import ScreenCap
 from minidevice.touch import Touch
 from minidevice.device import MiniDevice
+import minidevice.logger

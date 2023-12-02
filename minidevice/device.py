@@ -1,6 +1,10 @@
 from minidevice import *
 import threading
 
+from minidevice.logger import logger
+
+
+
 
 class MiniDevice:
     def __init__(self, serial: str, capMethod: ADBtouch | Minicap | DroidCast = None,
@@ -13,6 +17,7 @@ class MiniDevice:
             touchMethod (TOUCH_METHOD, optional): ADBtouch | Minitouch. Defaults to None.
             screenshotTimeout (int, optional):截图延迟，每张截图之间的延迟时间(包含截图过程) 单位ms. Defaults to 500.
         """
+        self.__serial = serial
         if not issubclass(capMethod,ScreenCap):
             raise TypeError(f"{capMethod.__name__} is not a subclass of {ScreenCap.__name__}")
         if not issubclass(touchMethod,Touch):
@@ -44,6 +49,8 @@ class MiniDevice:
                                                                     self.__timeoutFun)
                     self.__screenshotTimeoutTimer.start()
                     self.__current_screenshot = self.__capMethod.screencap_raw()
+                    logger.debug(f"take screenshot on {self.__serial}")
+                    
                 finally:
                     # 释放锁
                     self.__screenshotThreadLock.release()
@@ -65,6 +72,7 @@ class MiniDevice:
                 self.__touchTimeoutTimer = threading.Timer(duration/1000,self.__timeoutFun)
                 self.__touchTimeoutTimer.start()     
                 self.__touchMethod.click(x, y, duration) 
+                logger.debug(f"clicked {self.__serial} at coordinates ({x}, {y})")
                 
             if not self.__touchThreadLock:
                 self.__touchThreadLock = threading.Lock()
@@ -96,6 +104,7 @@ class MiniDevice:
                 self.__touchTimeoutTimer = threading.Timer(duration/1000,self.__timeoutFun)
                 self.__touchTimeoutTimer.start()     
                 self.__touchMethod.swipe(points, duration) 
+                logger.debug(f"swiped {self.__serial} from {points[0]} to {points[-1]}")
                 
             if not self.__touchThreadLock:
                 self.__touchThreadLock = threading.Lock()
