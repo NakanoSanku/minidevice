@@ -13,9 +13,9 @@ class MiniDevice:
             touchMethod (TOUCH_METHOD, optional): ADBtouch | Minitouch. Defaults to None.
             screenshotTimeout (int, optional):截图延迟，每张截图之间的延迟时间(包含截图过程) 单位ms. Defaults to 500.
         """
-        if not isinstance(capMethod,ScreenCap):
+        if not issubclass(capMethod,ScreenCap):
             raise TypeError(f"{capMethod.__name__} is not a subclass of {ScreenCap.__name__}")
-        if not isinstance(touchMethod,Touch):
+        if not issubclass(touchMethod,Touch):
             raise TypeError(f"{touchMethod.__name__} is not a subclass of {Touch.__name__}")
         self.__capMethod = capMethod(serial) if capMethod else None
         self.__touchMethod = touchMethod(serial) if touchMethod else None
@@ -36,7 +36,7 @@ class MiniDevice:
             if not self.__screenshotThreadLock:
                 # 创建截图线程锁
                 self.__screenshotThreadLock = threading.Lock()
-            if (self.__screenshotTimeoutTimer and not self.__screenshotTimeoutTimer.alive()) or self.__screenshotTimeoutTimer is None:
+            if (self.__screenshotTimeoutTimer is not None and not self.__screenshotTimeoutTimer.is_alive()) or self.__screenshotTimeoutTimer is None:
                 # 获取锁
                 self.__screenshotThreadLock.acquire()
                 try:
@@ -50,13 +50,13 @@ class MiniDevice:
 
         return self.__current_screenshot
 
-    def click(self, x: int, y: int, duration: int):
+    def click(self, x: int, y: int, duration: int=100):
         """点击
 
         Args:
             x (int): x
             y (int): y
-            duration (int): 触摸时间
+            duration (int): 触摸时间 默认100ms
         """
 
         if self.__touchMethod:
@@ -71,9 +71,9 @@ class MiniDevice:
                 
             self.__touchThreadLock.acquire()
             try:    
-                if (self.__touchTimeoutTimer and not self.__touchTimeoutTimer.alive()) or self.__touchTimeoutTimer is None:
+                if (self.__touchTimeoutTimer is not None and not self.__touchTimeoutTimer.is_alive()) or self.__touchTimeoutTimer is None:
                     func()
-                if self.__touchTimeoutTimer and self.__touchTimeoutTimer.alive():
+                if self.__touchTimeoutTimer and self.__touchTimeoutTimer.is_alive():
                     def waitFunc():
                         self.__touchTimeoutTimer.join()
                         func()
@@ -83,12 +83,12 @@ class MiniDevice:
                 self.__touchThreadLock.release()  
                 
                 
-    def swipe(self, points: list, duration: int):
+    def swipe(self, points: list, duration: int=300):
         """滑动
 
         Args:
             points (list): [(x,y),(x,y)....]
-            duration (int): 触摸时间
+            duration (int): 触摸时间 默认300ms
         """
         if self.__touchMethod:
 
@@ -102,9 +102,9 @@ class MiniDevice:
                 
             self.__touchThreadLock.acquire()
             try:    
-                if (self.__touchTimeoutTimer and not self.__touchTimeoutTimer.alive()) or self.__touchTimeoutTimer is None:
+                if (self.__touchTimeoutTimer is not None and not self.__touchTimeoutTimer.is_alive()) or self.__touchTimeoutTimer is None:
                     func()
-                if self.__touchTimeoutTimer and self.__touchTimeoutTimer.alive():
+                if self.__touchTimeoutTimer and self.__touchTimeoutTimer.is_alive():
                     def waitFunc():
                         self.__touchTimeoutTimer.join()
                         func()

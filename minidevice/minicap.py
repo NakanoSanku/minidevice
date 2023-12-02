@@ -7,7 +7,7 @@ import time
 
 from adbutils import adb,adb_path
 from minidevice.QueueUtils import PipeQueue
-from minidevice import ScreenCap
+from minidevice.screencap import ScreenCap
 
 WORK_DIR = os.path.dirname(__file__)
 MINICAP_PATH = "{}/bin/minicap/libs".format(WORK_DIR)

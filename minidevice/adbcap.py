@@ -1,5 +1,5 @@
 from adbutils import adb, adb_path
-from minidevice import ScreenCap
+from minidevice.screencap import ScreenCap
 import subprocess
 
 
