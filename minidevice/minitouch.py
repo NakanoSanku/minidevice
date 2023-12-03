@@ -21,13 +21,16 @@ class Minitouch(Touch, MNTDevice):
         self.__get_device_info()
         self.__minitouch_install()
         self.__kill_minitouch()
-        MNTDevice.__init__(self, serial)
-        
+        try:
+            MNTDevice.__init__(self, serial)
+        except ValueError:
+            print("MNT初始化连接失败,重新尝试中")
+            MNTDevice.__init__(self, serial)
+
     def __kill_minitouch(self):
         pid = self.__adb.shell(['pidof', 'minitouch']).strip()
         if pid:
             self.__adb.shell(['kill', pid])
-    
 
     def __get_device_info(self):
         self.__abi = self.__adb.getprop("ro.product.cpu.abi")
@@ -41,7 +44,7 @@ class Minitouch(Touch, MNTDevice):
         MNTDevice.tap(self, [(x, y)], duration=duration)
 
     def swipe(self, points: list, duration: int = 300):
-        MNTDevice.swipe(self, points, duration=duration/(len(points)-1))
+        MNTDevice.swipe(self, points, duration=duration / (len(points) - 1))
 
     def __del__(self):
         MNTDevice.stop(self)
