@@ -292,7 +292,8 @@ class Minicap(ScreenCap):
         self.__minicap_popen = subprocess.Popen(
             adb_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
-        time.sleep(2)
+        print("minicap connection takes a long time, please be patient.")
+        time.sleep(3)
         return True
 
     def __forward_minicap(self):

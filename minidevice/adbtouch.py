@@ -20,4 +20,4 @@ class ADBtouch(Touch):
     def swipe(self, points: list, duration: int = 300):
         start_x, start_y = points[0]
         end_x, end_y = points[-1]
-        self.__adb.swipe(self, start_x, start_y, end_x, end_y, duration/1000)
+        self.__adb.swipe(start_x, start_y, end_x, end_y, duration/1000)

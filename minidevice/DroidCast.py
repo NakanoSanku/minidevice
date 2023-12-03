@@ -17,7 +17,7 @@ class DroidCast(ScreenCap):
         __init__ DroidCast截图方法
 
         Args:
-            device (str): 设备id
+            serial (str): 设备id
 
         """
         self.__adb = adb.device(serial)
