@@ -52,6 +52,16 @@ README说明,添加[MiniDevice](./minidevice/device.py)类
 - @abstractmethod swipe(points,duraiton)
 
 整合至MiniDevice类创建对安卓设备操作的对象,引入基础操作锁，防止不合理并发导致的程序错误
+```
+MiniDevice(self, serial=None, capMethod: Union[ADBtouch, Minicap , DroidCast] = None,
+                 touchMethod: Union[ADBtouch,Minitouch] = None, screenshotTimeout=500)
+```
+`capMethod`|`touchMethod` 为 `ScreenCap` | `Touch` 的**子类或者子类实例**，为None时不创建对应方法
+
+当`capMethod`|`touchMethod`包含子类时，`serial`为必须
+ - screenshot_raw
+ - click
+ - swipe
 > User无需关心具体实现过程，Developer直接继承基类即可添加新方法
 
 ### 已实现的特性

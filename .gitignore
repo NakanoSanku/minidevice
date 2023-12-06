@@ -6,3 +6,4 @@ __pycache__
 main.py
 screencap.png
 *.png
+.coverage

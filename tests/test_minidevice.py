@@ -24,12 +24,12 @@ def test_minidevice(capMethod, touchMethod):
     test_device = MiniDevice(SERIAL, capMethod, touchMethod, SCREENSHOT_TIMEOUT)
     if capMethod:
         # 判断截图是否可用
-        assert isinstance(test_device.screenshot(), bytes)
+        assert isinstance(test_device.screenshot_raw(), bytes)
         # 等待图片延迟结束
         time.sleep(SCREENSHOT_TIMEOUT / 1000)
         # 截图速度测试 TODO: `minicap`测试速度不准确 原因未知
         startTime = time.time()
-        test_device.screenshot()
+        test_device.screenshot_raw()
         endTime = time.time()
         logger.logger.info(f" {capMethod.__name__} 方法截图速度为{(endTime - startTime) * 1000}ms")
     if touchMethod:
