@@ -28,7 +28,7 @@ class MiniDevice:
                 raise TypeError(f"{method.__name__} is not a class")
 
         if capMethod:
-            if isinstance(capMethod, Touch):
+            if isinstance(capMethod, ScreenCap):
                 self.__capMethod = capMethod
             else:
                 typeAndClassCheck(capMethod,ScreenCap)
