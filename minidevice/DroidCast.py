@@ -9,7 +9,7 @@ from minidevice.screencap import ScreenCap
 WORK_DIR = os.path.dirname(__file__)
 APK_PATH = "{}/bin/DroidCast-debug-1.2.0.apk".format(WORK_DIR)
 APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.2.0.apk"
-
+APK_VERSION = "1.2.0"
 
 class DroidCast(ScreenCap):
     def __init__(self, serial) -> None:
@@ -29,12 +29,16 @@ class DroidCast(ScreenCap):
     def __install(self):
         if "com.rayworks.droidcast" not in self.__adb.list_packages():
             self.__adb.install(APK_PATH, nolaunch=True)
+        else:
+            if self.__adb.package_info("com.rayworks.droidcast")['version_name'] != APK_VERSION:
+                self.__adb.uninstall("com.rayworks.droidcast")
+                self.__adb.install(APK_PATH, nolaunch=True)
 
     def __start_droidcast(self):
         out = self.__adb.shell("pm path com.rayworks.droidcast")
         self.__class_path = "CLASSPATH=" + out.split(":")[1]
         start_droidcast_cmd = "exec app_process / com.rayworks.droidcast.Main"
-        self.droidcast_popen = subprocess.Popen(
+        self.__droidcast_popen = subprocess.Popen(
             [
                 adb_path(),
                 "-s",
@@ -58,11 +62,11 @@ class DroidCast(ScreenCap):
         print("DroidCast启动完成")
 
     def __stop(self):
-        if self.droidcast_popen.poll() is None:
-            self.droidcast_popen.kill()  # 关闭管道
+        if self.__droidcast_popen.poll() is None:
+            self.__droidcast_popen.kill()  # 关闭管道
 
     def screencap_raw(self) -> bytes:
-        if self.droidcast_popen.poll() is not None:
+        if self.__droidcast_popen.poll() is not None:
             self.__stop()
             self.__start()
         return self.__droidcast_session.get(self.__droidcast_url, timeout=3).content
