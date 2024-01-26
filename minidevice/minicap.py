@@ -193,7 +193,7 @@ class MinicapStream:
             self.minicapSocket.close()  # 关闭 minicap 的 socket 连接
 
 
-class Minicap(ScreenCap):
+class MiniCap(ScreenCap):
     def __init__(
         self,
         serial,
@@ -293,7 +293,7 @@ class Minicap(ScreenCap):
             adb_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
         print("minicap connection takes a long time, please be patient.")
-        time.sleep(3)
+        time.sleep(1)
         return True
 
     def __forward_minicap(self):

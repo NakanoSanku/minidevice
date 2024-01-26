@@ -5,8 +5,8 @@ from minidevice.logger import logger
 
 
 class MiniDevice:
-    def __init__(self, serial=None, capMethod: Union[ADBtouch, Minicap, DroidCast] = None,
-                 touchMethod: Union[ADBtouch, Minitouch] = None, screenshotTimeout=500) -> None:
+    def __init__(self, serial=None, capMethod: Union[ADBCap, MiniCap, DroidCast] = None,
+                 touchMethod: Union[ADBTouch, MiniTouch, MaaTouch] = None, screenshotTimeout=500) -> None:
         """设备操作类
 
         Args:
@@ -31,7 +31,7 @@ class MiniDevice:
             if isinstance(capMethod, ScreenCap):
                 self.__capMethod = capMethod
             else:
-                typeAndClassCheck(capMethod,ScreenCap)
+                typeAndClassCheck(capMethod, ScreenCap)
                 if self.__serial:
                     self.__capMethod = capMethod(serial)
                 else:
@@ -46,7 +46,6 @@ class MiniDevice:
                     self.__touchMethod = touchMethod(serial)
                 else:
                     raise TypeError(f"{touchMethod.__name__} missing instantiation parameter")
-
 
         self.__touchThreadLock = threading.Lock()  # 操作线程锁
         self.__touchTimeoutTimer = None  # 操作延迟定时器
@@ -78,6 +77,11 @@ class MiniDevice:
                     self.__screenshotThreadLock.release()
 
         return self.__current_screenshot
+
+    def save_screenshot(self, path: str) -> None:
+        """保存截图"""
+        with open(path, 'wb') as file:
+            file.write(self.screenshot_raw())
 
     def click(self, x: int, y: int, duration: int = 100):
         """点击

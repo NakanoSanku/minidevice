@@ -2,7 +2,7 @@ from adbutils import adb
 from minidevice.touch import Touch
 
 
-class ADBtouch(Touch):
+class ADBTouch(Touch):
     def __init__(self, serial) -> None:
         """
         __init__ ADB 操作方式

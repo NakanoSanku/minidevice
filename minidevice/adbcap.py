@@ -3,7 +3,7 @@ from minidevice.screencap import ScreenCap
 import subprocess
 
 
-class ADBcap(ScreenCap):
+class ADBCap(ScreenCap):
     def __init__(self, serial) -> None:
         """
         __init__ ADB 截图方式
