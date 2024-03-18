@@ -6,7 +6,7 @@ from minidevice.logger import logger
 
 class MiniDevice:
     def __init__(self, serial=None, capMethod: Union[ADBCap, MiniCap, DroidCast] = None,
-                 touchMethod: Union[ADBTouch, MiniTouch, MaaTouch] = None, screenshotTimeout=500) -> None:
+                 touchMethod: Union[ADBTouch, MiniTouch, MaaTouch] = None, screenshotTimeout=15) -> None:
         """设备操作类
 
         Args:
