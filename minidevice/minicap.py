@@ -220,9 +220,9 @@ class MiniCap(ScreenCap):
 
     def screencap_raw(self) -> bytes:
         if self.__use_stream:
-            if self.__minicap_popen.poll() is not None:
-                self.__stop_minicap_by_stream()
-                self.__start_minicap_by_stream()
+            #if self.__minicap_popen.poll() is not None:
+                #self.__stop_minicap_by_stream()
+                #self.__start_minicap_by_stream()
             return self.__screen_queue.get()
         else:
             return self.__minicap_frame()
