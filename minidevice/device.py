@@ -143,3 +143,25 @@ class MiniDevice:
                     threading.Thread(target=waitFunc).start()  # 启动一个新线程在上一个操作执行完后执行当前操作
             finally:
                 self.__touchThreadLock.release()
+
+    def width(self):
+        """
+        设备的width
+        :return:
+        """
+        w = -1
+        if isinstance(self.__touchMethod, MaaTouch):
+            tempTouchMethod: MaaTouch = self.__touchMethod
+            w = int(tempTouchMethod.max_x)
+        return w
+
+    def height(self):
+        """
+        设备的height
+        :return:
+        """
+        h = -1
+        if isinstance(self.__touchMethod, MaaTouch):
+            tempTouchMethod: MaaTouch = self.__touchMethod
+            h = int(tempTouchMethod.max_y)
+        return h
