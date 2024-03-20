@@ -5,7 +5,7 @@ import subprocess
 import threading
 import time
 
-from adbutils import adb,adb_path
+from adbutils import adb, adb_path
 from minidevice.QueueUtils import PipeQueue
 from minidevice.screencap import ScreenCap
 
@@ -36,25 +36,25 @@ class Banner:
 
     def __str__(self):
         message = (
-            "Banner [Version="
-            + str(self.Version)
-            + ", length="
-            + str(self.Length)
-            + ", Pid="
-            + str(self.Pid)
-            + ", realWidth="
-            + str(self.RealWidth)
-            + ", realHeight="
-            + str(self.RealHeight)
-            + ", virtualWidth="
-            + str(self.VirtualWidth)
-            + ", virtualHeight="
-            + str(self.VirtualHeight)
-            + ", orientation="
-            + str(self.Orientation)
-            + ", quirks="
-            + str(self.Quirks)
-            + "]"
+                "Banner [Version="
+                + str(self.Version)
+                + ", length="
+                + str(self.Length)
+                + ", Pid="
+                + str(self.Pid)
+                + ", realWidth="
+                + str(self.RealWidth)
+                + ", realHeight="
+                + str(self.RealHeight)
+                + ", virtualWidth="
+                + str(self.VirtualWidth)
+                + ", virtualHeight="
+                + str(self.VirtualHeight)
+                + ", orientation="
+                + str(self.Orientation)
+                + ", quirks="
+                + str(self.Quirks)
+                + "]"
         )
         return message
 
@@ -135,24 +135,24 @@ class MinicapStream:
                         self.banner.Length = bannerLength
                     elif readBannerBytes in [2, 3, 4, 5]:
                         self.banner.Pid += (
-                            chunk[cursor] << ((readBannerBytes - 2) * 8)
-                        ) >> 0
+                                                   chunk[cursor] << ((readBannerBytes - 2) * 8)
+                                           ) >> 0
                     elif readBannerBytes in [6, 7, 8, 9]:
                         self.banner.RealWidth += (
-                            chunk[cursor] << ((readBannerBytes - 6) * 8)
-                        ) >> 0
+                                                         chunk[cursor] << ((readBannerBytes - 6) * 8)
+                                                 ) >> 0
                     elif readBannerBytes in [10, 11, 12, 13]:
                         self.banner.RealHeight += (
-                            chunk[cursor] << ((readBannerBytes - 10) * 8)
-                        ) >> 0
+                                                          chunk[cursor] << ((readBannerBytes - 10) * 8)
+                                                  ) >> 0
                     elif readBannerBytes in [14, 15, 16, 17]:
                         self.banner.VirtualWidth += (
-                            chunk[cursor] << ((readBannerBytes - 14) * 8)
-                        ) >> 0
+                                                            chunk[cursor] << ((readBannerBytes - 14) * 8)
+                                                    ) >> 0
                     elif readBannerBytes in [18, 19, 20, 21]:
                         self.banner.VirtualHeight += (
-                            chunk[cursor] << ((readBannerBytes - 18) * 8)
-                        ) >> 0
+                                                             chunk[cursor] << ((readBannerBytes - 18) * 8)
+                                                     ) >> 0
                     elif readBannerBytes == 22:
                         self.banner.Orientation = chunk[cursor] * 90
                     elif readBannerBytes == 23:
@@ -164,14 +164,14 @@ class MinicapStream:
                 # 读取图片大小数据
                 elif readFrameBytes < 4:
                     frameBodyLength = frameBodyLength + (
-                        (chunk[cursor] << (readFrameBytes * 8)) >> 0
+                            (chunk[cursor] << (readFrameBytes * 8)) >> 0
                     )
                     cursor += 1
                     readFrameBytes += 1
                 # 读取图片内容
                 else:
                     if length - cursor >= frameBodyLength:
-                        dataBody = dataBody + chunk[cursor : (cursor + frameBodyLength)]
+                        dataBody = dataBody + chunk[cursor: (cursor + frameBodyLength)]
                         if dataBody[0] != 0xFF or dataBody[1] != 0xD8:
                             return
                         self.queue.put(dataBody)
@@ -195,11 +195,11 @@ class MinicapStream:
 
 class MiniCap(ScreenCap):
     def __init__(
-        self,
-        serial,
-        rate=15,
-        quality=100,
-        use_stream=True,
+            self,
+            serial,
+            rate=15,
+            quality=100,
+            use_stream=True,
     ) -> None:
         """
         __init__ minicap截图方式
@@ -211,6 +211,13 @@ class MiniCap(ScreenCap):
             use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
         """
         self.__adb = adb.device(serial)
+
+        # 先重置 minicap
+        # Kill the existing Minicap process
+        self.__adb.shell(['pkill', '-9', 'minicap'])
+        # Restart Minicap service
+        self.__adb.shell(['am', 'startservice', '-n', 'com.example.minicap/.MinicapService'])
+
         self.__use_stream = use_stream
         self.__quality = quality
         self.__rate = rate
@@ -241,8 +248,33 @@ class MiniCap(ScreenCap):
         jpg_data = jpg_data.replace(line_breaker(self.__sdk), b"\n")
         return jpg_data
 
+    def get_screen_orientation(self):
+        """
+        Get the screen orientation of the device.
+        :return: 'portrait' if the screen orientation is portrait, 'landscape' if it's landscape.
+        """
+        # Execute adb shell command to get the screen orientation
+        output = self.__adb.shell(['dumpsys', 'input', '|\grep', 'SurfaceOrientation'])
+
+        # Extract the orientation from the output
+        orientation = 'portrait' if 'SurfaceOrientation: 0' in output else 'landscape'
+
+        return orientation
+
     def __get_device_info(self):
-        self.__vm_size = self.__adb.shell("wm size").split(" ")[-1]
+        # 根据此时的状态决定是横屏竖屏
+        if self.get_screen_orientation() == 'landscape':
+            # 获得原始设备尺寸
+            rawMessage = self.__adb.shell("wm size").split(" ")[-1].split("x")
+            # 大的尺寸
+            bigSize = max(int(rawMessage[0]), int(rawMessage[1]))
+            # 小的尺寸
+            smallSize = min(int(rawMessage[0]), int(rawMessage[1]))
+            # 目标尺寸
+            purposeSize = f"{bigSize}x{smallSize}"
+        else:
+            purposeSize = self.__adb.shell("wm size").split(" ")[-1]
+        self.__vm_size = purposeSize
         self.__abi = self.__adb.getprop("ro.product.cpu.abi")
         self.__sdk = self.__adb.getprop("ro.build.version.sdk")
 
@@ -320,5 +352,3 @@ class MiniCap(ScreenCap):
 
     def __del__(self):
         self.__stop_minicap_by_stream()
-
-
