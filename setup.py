@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fp:
 
 setup(
     name="minidevice",
-    version="3.0.0",
+    version="0.0.1",
     description="Android Auto Pypi",
     author="KateTseng",
     author_email="Kate.TsengK@outlook.com",
@@ -17,6 +17,6 @@ setup(
     project_urls={},
     packages=find_packages(),
     include_package_data=True,
-    install_requires=["adbutils"],
+    install_requires=["adbutils","loguru"],
     python_requires=">=3",
 )
