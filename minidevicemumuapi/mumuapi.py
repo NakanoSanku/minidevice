@@ -168,6 +168,7 @@ class MuMuScreenCap(ScreenCap):
     def __del__(self):
         self.nemu.disconnect(self.handle)
 
+
 class MuMuTouch(Touch):
     def __init__(
         self,
@@ -194,20 +195,40 @@ class MuMuTouch(Touch):
         self.nemu = MuMuApi(self.dllPath)
         # 连接模拟器
         self.handle = self.nemu.connect(self.emulatorInstallPath, self.instanceIndex)
-        # self.__getDisplayInfo()
+        self.__getDisplayInfo()
+
+    def __getDisplayInfo(self):
+        self.width = ctypes.c_int(0)
+        self.height = ctypes.c_int(0)
+        result = self.nemu.captureDisplay(
+            self.handle,
+            self.displayId,
+            0,
+            ctypes.byref(self.width),
+            ctypes.byref(self.height),
+            None,
+        )
+        if result != 0:
+            print("Failed to get the display size.")
+            return None
 
     def click(self, x: int, y: int, duration: int = 100):
+        x, y = self.xyChange(x, y)
         self.nemu.inputEventTouchDown(self.handle, self.displayId, x, y)
-        time.sleep(duration)
+        time.sleep(duration / 1000)
         self.nemu.inputEventTouchUp(self.handle, self.displayId)
 
     def swipe(self, points: list, duration: int = 300):
         for point in points:
-            self.nemu.inputEventTouchDown(
-                self.handle, self.displayId, point[0], point[1]
-            )
-            time.sleep(duration / len(points))
+            x, y = self.xyChange(point[0], point[1])
+            self.nemu.inputEventTouchDown(self.handle, self.displayId, x, y)
+            time.sleep(duration / len(points) / 1000)
         self.nemu.inputEventTouchUp(self.handle, self.displayId)
+
+    def xyChange(self, x, y):
+        x, y = int(x), int(y)
+        x, y = self.height.value - y, x
+        return x, y
 
     def __del__(self):
         self.nemu.disconnect(self.handle)
