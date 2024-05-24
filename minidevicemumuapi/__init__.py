@@ -1,1 +1,1 @@
-from mumuapi import MuMuScreenCap,MuMuTouch
+from minidevicemumuapi.mumuapi import MuMuScreenCap, MuMuTouch
