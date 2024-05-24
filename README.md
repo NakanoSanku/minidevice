@@ -1,5 +1,8 @@
+工具包分支:
+  - 基于mumuapi实现的**mumu12**专属基础操作----【**[minidevice-mumuapi](https://github.com/NakanoSanku/minidevice/tree/minidevice-mumuapi)**】
+  - 基于windowsapi**DX渲染**实现的基础操作----【**[minidevice-winapidx](https://github.com/NakanoSanku/minidevice/tree/minidevice-winapidx)**】
 # minidevice
-一个对安卓设备(主要是安卓模拟器)进行基础操作的工具包
+一个对安卓设备(主要是安卓模拟器)进行基础操作的工具包-------基于adb实现
 ## 项目结构
 - **Root Directory**
   - `README.md`
