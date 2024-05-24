@@ -1,1 +1,1 @@
-from mumuapi import MuMumuScreenCap,MuMumuTouch
+from mumuapi import MuMuScreenCap,MuMuTouch

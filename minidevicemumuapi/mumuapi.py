@@ -85,7 +85,7 @@ class MuMuApi:
         return self.nemu.nemu_input_event_key_up(handle, displayId, keyCode)
 
 
-class MuMumuScreenCap(ScreenCap):
+class MuMuScreenCap(ScreenCap):
     def __init__(
         self,
         instanceIndex,
@@ -168,7 +168,7 @@ class MuMumuScreenCap(ScreenCap):
     def __del__(self):
         self.nemu.disconnect(self.handle)
 
-class MuMumuTouch(Touch):
+class MuMuTouch(Touch):
     def __init__(
         self,
         instanceIndex,
@@ -214,7 +214,7 @@ class MuMumuTouch(Touch):
 
 
 if __name__ == "__main__":
-    test = MuMumuScreenCap(0, "D:\\MuMuPlayer-12.0")
+    test = MuMuScreenCap(0, "D:\\MuMuPlayer-12.0")
     # for i in range(5):
     #     s = time.time()
     #     image = test.screencap_raw()
