@@ -1,0 +1,1 @@
+from mumuapi import MuMumuScreenCap,MuMumuTouch
