@@ -139,5 +139,5 @@ class MaaTouch(Touch):
         return self.__tap([(x, y)], duration=duration)
 
     def swipe(self, points: list, duration: int = 300):
-        return self.__swipe(points, duration=duration)
+        return self.__swipe(points, duration=duration/len(points))
 
