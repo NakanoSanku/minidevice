@@ -1,25 +1,17 @@
-import os
+import json
 import socket
 import struct
 import subprocess
 import threading
 import time
 
-from adbutils import adb, adb_path
-from minidevice.QueueUtils import PipeQueue
-from minidevice.screencap import ScreenCap
+from adbutils import adb
 
-WORK_DIR = os.path.dirname(__file__)
-MINICAP_PATH = "{}/bin/minicap/libs".format(WORK_DIR)
-MINICAPSO_PATH = "{}/bin/minicap/jni".format(WORK_DIR)
-
-
-def line_breaker(sdk):
-    if sdk >= 24:
-        line_breaker = os.linesep
-    else:
-        line_breaker = "\r" + os.linesep
-    return line_breaker.encode("ascii")
+from minidevice.config import MINICAP_PATH, MINICAPSO_PATH, ADB_EXECUTOR, MNC_HOME, MNC_SO_HOME, MINICAP_COMMAND, \
+    MINICAP_START_TIMEOUT
+from minidevice.screencap.screencap import ScreenCap
+from minidevice.utils.logger import logger
+from minidevice.utils.queue_utils import PipeQueue
 
 
 class Banner:
@@ -105,7 +97,7 @@ class MinicapStream:
         self.minicapSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # 定义socket类型，网络通信，TCP
         self.minicapSocket.connect((self.__host, self.__port))
-        print(f"connect to {self.__host}:{self.__port}")
+        logger.info(f"connect to {self.__host}:{self.__port}")
         self.ReadImageStreamTask = threading.Thread(target=self.ReadImageStream)
         self.ReadImageStreamTask.daemon = True
         self.running = True
@@ -160,7 +152,7 @@ class MinicapStream:
                     cursor += 1
                     readBannerBytes += 1
                     if readBannerBytes == bannerLength:
-                        print(self.banner)
+                        logger.info(self.banner)
                 # 读取图片大小数据
                 elif readFrameBytes < 4:
                     frameBodyLength = frameBodyLength + (
@@ -193,139 +185,117 @@ class MinicapStream:
             self.minicapSocket.close()  # 关闭 minicap 的 socket 连接
 
 
+class MiniCapUnSupportError(Exception):
+    pass
+
+
 class MiniCap(ScreenCap):
     def __init__(
             self,
             serial,
-            rate=15,
+            rate=None,
             quality=100,
+            skip_frame=False,
             use_stream=True,
-    ) -> None:
+    ):
         """
         __init__ minicap截图方式
 
         Args:
             serial (str): 设备id
-            rate (int, optional): 截图帧率. Defaults to 15.
+            rate (int, optional): 截图帧率. Defaults to 自动获取.
             quality (int, optional): 截图品质1~100之间. Defaults to 100.
+            skip_frame(bool,optional): 当无法快速获得截图时，跳过这个帧
             use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
         """
         self.__adb = adb.device(serial)
-
-        # 先重置 minicap
-        # Kill the existing Minicap process
-        self.__adb.shell(['pkill', '-9', 'minicap'])
-        # Restart Minicap service
-        self.__adb.shell(['am', 'startservice', '-n', 'com.example.minicap/.MinicapService'])
-
+        self.__skip_frame = skip_frame
         self.__use_stream = use_stream
         self.__quality = quality
         self.__rate = rate
         self.__get_device_info()
+
+        self.__minicap_kill()
+        self.__minicap_install()
+        self.__get_device_input_info()
         if self.__use_stream:
             self.__start_minicap_by_stream()
 
     def screencap_raw(self) -> bytes:
         if self.__use_stream:
-            if self.__minicap_popen.poll() is not None:
-                self.__stop_minicap_by_stream()
-                self.__start_minicap_by_stream()
             return self.__screen_queue.get()
         else:
             return self.__minicap_frame()
 
     def __minicap_frame(self):
-        adb_command = [
-            "shell",
-            "LD_LIBRARY_PATH=/data/local/tmp",
-            "/data/local/tmp/minicap",
-        ]
-        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/0"])
+        adb_command = MINICAP_COMMAND+[]
+        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/{self.__rotation}"])
         adb_command.extend(["-Q", str(self.__quality)])
         adb_command.extend(["-s"])
-        raw_data = self.__adb.shell(adb_command)
-        jpg_data = raw_data.split(b"for JPG encoder\n" + line_breaker(self.__sdk))[-1]
-        jpg_data = jpg_data.replace(line_breaker(self.__sdk), b"\n")
+        raw_data = self.__adb.shell(adb_command, encoding=None)
+        jpg_data = raw_data.split(b"for JPG encoder\n")[-1]
         return jpg_data
 
-    def get_screen_orientation(self):
-        """
-        Get the screen orientation of the device.
-        :return: 'portrait' if the screen orientation is portrait, 'landscape' if it's landscape.
-        """
-        # Execute adb shell command to get the screen orientation
-        output = self.__adb.shell(['dumpsys', 'input', '|\grep', 'SurfaceOrientation'])
+    def __minicap_kill(self):
+        self.__adb.shell(['pkill', '-9', 'minicap'])
 
-        # Extract the orientation from the output
-        orientation = 'portrait' if 'SurfaceOrientation: 0' in output else 'landscape'
-
-        return orientation
+    def __get_device_input_info(self):
+        try:
+            # 通过 -i 参数获取屏幕信息
+            command = MINICAP_COMMAND + ["-i"]
+            info_result = self.__adb.shell(command)
+            # 找到JSON数据的起始位置
+            start_index = info_result.find('{')
+            # 提取JSON字符串
+            if start_index != -1:
+                extracted_json = info_result[start_index:]
+                logger.info(extracted_json)
+            else:
+                raise MiniCapUnSupportError("minicap does not support")
+            info = json.loads(extracted_json)
+            width = int(self.__adb.shell("dumpsys input|grep SurfaceWidth:").split(": ")[-1][:-2])
+            height = int(self.__adb.shell("dumpsys input|grep SurfaceHeight:").split(": ")[-1][:-2])
+            self.__vm_size = "{}x{}".format(width, height)
+            self.__rotation = info.get("rotation")
+            self.__rate = info.get("fps") if self.__rate is None else self.__rate
+        except Exception as e:
+            raise MiniCapUnSupportError("minicap does not support")
 
     def __get_device_info(self):
-        # 根据此时的状态决定是横屏竖屏
-        if self.get_screen_orientation() == 'landscape':
-            # 获得原始设备尺寸
-            rawMessage = self.__adb.shell("wm size").split(" ")[-1].split("x")
-            # 大的尺寸
-            bigSize = max(int(rawMessage[0]), int(rawMessage[1]))
-            # 小的尺寸
-            smallSize = min(int(rawMessage[0]), int(rawMessage[1]))
-            # 目标尺寸
-            purposeSize = f"{bigSize}x{smallSize}"
-        else:
-            purposeSize = self.__adb.shell("wm size").split(" ")[-1]
-        self.__vm_size = purposeSize
         self.__abi = self.__adb.getprop("ro.product.cpu.abi")
         self.__sdk = self.__adb.getprop("ro.build.version.sdk")
 
-    def __minicap_available(func):
-        def wrapper(self, *args, **kwargs):
-            try:
-                adb_command = [
-                    "LD_LIBRARY_PATH=/data/local/tmp",
-                    "/data/local/tmp/minicap",
-                ]
-                adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/0"])
-                adb_command.extend(["-t"])
-                result = self.__adb.shell(adb_command)
-                if "OK" in result:
-                    return func(self, *args, **kwargs)
-                print(result)
-                return False
-            except subprocess.CalledProcessError:
-                return False
-
-        return wrapper
-
     def __minicap_install(self):
+        """安装minicap"""
         if str(self.__sdk) == "32" and str(self.__abi) == "x86_64":
             self.__abi = "x86"
-        MNC_HOME = "/data/local/tmp/minicap"
-        MNC_SO_HOME = "/data/local/tmp/minicap.so"
-
+        if int(self.__sdk) > 33:
+            raise MiniCapUnSupportError("minicap does not support Android 12+")
         self.__adb.sync.push(f"{MINICAP_PATH}/{self.__abi}/minicap", MNC_HOME)
         self.__adb.sync.push(
             f"{MINICAPSO_PATH}/android-{self.__sdk}/{self.__abi}/minicap.so", MNC_SO_HOME
         )
         self.__adb.shell(["chmod +x", MNC_HOME])
 
-    @__minicap_available
     def __start_minicap(self):
-        adb_command = [adb_path()]
+        adb_command = [ADB_EXECUTOR]
         if self.__adb.serial is not None:
             adb_command.extend(["-s", self.__adb.serial])
-        adb_command.extend(
-            ["shell", "LD_LIBRARY_PATH=/data/local/tmp", "/data/local/tmp/minicap"]
-        )
-        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/0"])
+        adb_command.extend(["shell"])
+        adb_command.extend(MINICAP_COMMAND)
+        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/{self.__rotation}"])
         adb_command.extend(["-Q", str(self.__quality)])
         adb_command.extend(["-r", str(self.__rate)])
-        adb_command.extend(["-S"])
+        if self.__skip_frame:
+            adb_command.extend(["-S"])
+        logger.info(adb_command)
         self.__minicap_popen = subprocess.Popen(
             adb_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
-        print("minicap connection takes a long time, please be patient.")
-        time.sleep(1)
+        logger.info("minicap connection takes a long time, please be patient.")
+        for i in range(MINICAP_START_TIMEOUT):
+            logger.info("minicap starting by {}s".format(MINICAP_START_TIMEOUT - i))
+            time.sleep(1)
         return True
 
     def __forward_minicap(self):
@@ -338,17 +308,15 @@ class MiniCap(ScreenCap):
         self.__screen_queue = self.__minicap_stream.queue
 
     def __start_minicap_by_stream(self):
-        if not self.__start_minicap():
-            self.__minicap_install()
-            if not self.__start_minicap():
-                raise Exception("minicap不可用")
+        self.__start_minicap()
         self.__forward_minicap()
         self.__read_minicap_stream()
 
     def __stop_minicap_by_stream(self):
-        self.__minicap_stream.stop()  # 停止stream
-        if self.__minicap_popen.poll() is None:  # 清理管道
-            self.__minicap_popen.kill()
+        if self.__use_stream:
+            self.__minicap_stream.stop()  # 停止stream
+            if self.__minicap_popen.poll() is None:  # 清理管道
+                self.__minicap_popen.kill()
 
     def __del__(self):
         self.__stop_minicap_by_stream()

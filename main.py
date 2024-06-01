@@ -1,14 +1,16 @@
-from minidevice import MiniDevice
-from minidevice.minicap import MiniCap
-from minidevice.minitouch import MiniTouch
-from minidevice.maatouch import MaaTouch
-from minidevice.DroidCast import DroidCast
-from minidevice.adbcap import ADBCap
-from minidevice.adbtouch import ADBTouch
-#
-a = MiniDevice("emulator-5554", DroidCast, MiniTouch)
+import time
+
+from minidevice import *
+from minidevicemumuapi import *
+
+# MuMuScreenCap(0, r"D:\MuMuPlayer-12.0")
+# 创建一个MiniDevice实例
+# "127.0.0.1:16384"
+# emulator-5554
+a = MiniDevice("127.0.0.1:16384", None, MiniTouch, 0)
 
 
-a.save_screenshot("./screenshot.png")
-a.click(200, 400, 5000)
-print(a.width())
+a.click(200, 100, 5000)
+
+print("helloworld")
+

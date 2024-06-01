@@ -1,2 +1,5 @@
 adbutils
 loguru
+minidevice
+requests
+setuptools

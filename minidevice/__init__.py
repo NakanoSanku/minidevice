@@ -1,22 +1,21 @@
-from minidevice.DroidCast import DroidCast
-from minidevice.adbcap import ADBCap
-from minidevice.adbtouch import ADBTouch
-from minidevice.minicap import MiniCap
-from minidevice.minitouch import MiniTouch
-from minidevice.maatouch import MaaTouch
-from minidevice.screencap import ScreenCap
-from minidevice.touch import Touch
+from minidevice.screencap.droidcast import DroidCast
+from minidevice.screencap.adbcap import ADBCap
+from minidevice.touch.adbtouch import ADBTouch
+from minidevice.screencap.minicap import MiniCap
+from minidevice.touch.minitouch import MiniTouch
+from minidevice.touch.maatouch import MaaTouch
+from minidevice.screencap.screencap import ScreenCap
+from minidevice.touch.touch import Touch
 from minidevice.device import MiniDevice
-import minidevice.logger
 
 CAP_METHOD = {
     'adb': ADBCap,
-    'minicap': MiniCap,
+    'MiniCap': MiniCap,
     'DroidCast': DroidCast,
 }
 
 TOUCH_METHOD = {
     'adb': ADBTouch,
-    'minitouch': MiniTouch,
+    'MiniTouch': MiniTouch,
     'MaaTouch': MaaTouch
 }

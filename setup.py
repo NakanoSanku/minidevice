@@ -23,6 +23,6 @@ setup(
         # 如果bin文件不在包内，也可以直接指定路径
         # '': ['bin/*'],
     },
-    install_requires=["adbutils","loguru"],
+    install_requires=["adbutils", "loguru"],
     python_requires=">=3",
 )

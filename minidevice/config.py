@@ -12,10 +12,6 @@ DEFAULT_CHARSET = "utf-8"
 # operation
 DEFAULT_DELAY = 0.05
 
-# installer
-MNT_PREBUILT_URL = r"https://github.com/williamfzc/stf-binaries/raw/master/node_modules/minitouch-prebuilt/prebuilt"
-MNT_HOME = "/data/local/tmp/minitouch"
-
 # system
 # 'Linux', 'Windows' or 'Darwin'.
 SYSTEM_NAME = platform.system()
@@ -25,3 +21,23 @@ ADB_EXECUTOR = adb_path()
 # MaaTouch
 MAATOUCH_FILEPATH_REMOTE = "/data/local/tmp/maatouch"
 MAATOUCH_FILEPATH_LOCAL = "{}/bin/maatouch".format(WORK_DIR)
+
+# MINICAP
+MINICAP_PATH = "{}/bin/minicap/libs".format(WORK_DIR)
+MINICAPSO_PATH = "{}/bin/minicap/jni".format(WORK_DIR)
+MNC_HOME = "/data/local/tmp/minicap"
+MNC_SO_HOME = "/data/local/tmp/minicap.so"
+MINICAP_COMMAND = ["LD_LIBRARY_PATH=/data/local/tmp", "/data/local/tmp/minicap"]
+MINICAP_START_TIMEOUT = 3
+
+
+# DroidCast
+DROIDCAST_APK_VERSION = "1.2.1"
+DROIDCAST_APK_PATH = "{}/bin/DroidCast-debug-{}.apk".format(WORK_DIR, DROIDCAST_APK_VERSION)
+DROIDCAST_APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-{}.apk".format(DROIDCAST_APK_VERSION)
+
+# MiniTouch
+MINITOUCH_PATH = "{}/bin/minitouch/libs".format(WORK_DIR)
+MINITOUCH_REMOTE_PATH = "/data/local/tmp/minitouch"
+MINITOUCH_REMOTE_ADDR = "localabstract:minitouch"
+MINITOUCH_SERVER_START_DELAY = 1

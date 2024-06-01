@@ -1,11 +1,11 @@
 import socket
-from minidevice.minitouch import CommandBuilder
+from minidevice.utils.command_builder_utils import CommandBuilder
 from minidevice import config
-from minidevice.logger import logger
-from minidevice.touch import Touch
+from minidevice.utils.logger import logger
+from minidevice.touch.touch import Touch
 from adbutils import adb
 
-from minidevice.utils import str2byte
+from minidevice.utils.utils import str2byte
 
 
 class MaaTouch(Touch):

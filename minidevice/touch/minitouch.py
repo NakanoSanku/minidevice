@@ -1,86 +1,16 @@
-import os
 import time
 import subprocess
 import socket
-import os
 
 from adbutils import adb
 
-from minidevice.logger import logger
+from minidevice.config import MINITOUCH_SERVER_START_DELAY, MINITOUCH_REMOTE_ADDR, MINITOUCH_PATH, \
+    MINITOUCH_REMOTE_PATH, ADB_EXECUTOR
+from minidevice.utils.command_builder_utils import CommandBuilder
+from minidevice.utils.logger import logger
 from minidevice import config
-from minidevice.touch import Touch
-from minidevice.utils import str2byte
-
-WORK_DIR = os.path.dirname(__file__)
-MINITOUCH_PATH = "{}/bin/minitouch/libs".format(WORK_DIR)
-MINITOUCH_REMOTE_PATH = "/data/local/tmp/minitouch"
-_ADB = config.ADB_EXECUTOR
-MINITOUCH_REMOTE_ADDR = "localabstract:minitouch"
-MINITOUCH_SERVER_START_DELAY = 1
-
-
-class CommandBuilder(object):
-    """Build command str for minitouch.
-
-    You can use this, to custom actions as you wish::
-
-        with safe_connection(_DEVICE_ID) as connection:
-            builder = CommandBuilder()
-            builder.down(0, 400, 400, 50)
-            builder.commit()
-            builder.move(0, 500, 500, 50)
-            builder.commit()
-            builder.move(0, 800, 400, 50)
-            builder.commit()
-            builder.up(0)
-            builder.commit()
-            builder.publish(connection)
-
-    use `d.connection` to get `connection` from device
-    """
-
-    # TODO (x, y) can not beyond the screen size
-    def __init__(self):
-        self._content = ""
-        self._delay = 0
-
-    def append(self, new_content):
-        self._content += new_content + "\n"
-
-    def commit(self):
-        """add minitouch command: 'c\n'"""
-        self.append("c")
-
-    def wait(self, ms):
-        """add minitouch command: 'w <ms>\n'"""
-        self.append("w {}".format(ms))
-        self._delay += ms
-
-    def up(self, contact_id):
-        """add minitouch command: 'u <contact_id>\n'"""
-        self.append("u {}".format(contact_id))
-
-    def down(self, contact_id, x, y, pressure):
-        """add minitouch command: 'd <contact_id> <x> <y> <pressure>\n'"""
-        self.append("d {} {} {} {}".format(contact_id, x, y, pressure))
-
-    def move(self, contact_id, x, y, pressure):
-        """add minitouch command: 'm <contact_id> <x> <y> <pressure>\n'"""
-        self.append("m {} {} {} {}".format(contact_id, x, y, pressure))
-
-    def publish(self, connection):
-        """apply current commands (_content), to your device"""
-        self.commit()
-        final_content = self._content
-        logger.info("send operation: {}".format(final_content.replace("\n", "\\n")))
-        connection.send(final_content)
-        time.sleep(self._delay / 1000 + config.DEFAULT_DELAY)
-        self.reset()
-
-    def reset(self):
-        """clear current commands (_content)"""
-        self._content = ""
-        self._delay = 0
+from minidevice.touch.touch import Touch
+from minidevice.utils.utils import str2byte
 
 
 class MiniTouchUnSupportError(Exception):
@@ -93,7 +23,7 @@ class MiniTouch(Touch):
         __init__ minitouch点击方式
 
         Args:
-            device (str): 设备id
+            serial (str): 设备id
         """
         self.minitouch_process = None  # minitouch服务进程
         self.minitouch_port = None  # Socket端口记录
@@ -109,7 +39,7 @@ class MiniTouch(Touch):
     def __start_minitouch_server(self):
         """启动安卓设备Minitouch Server"""
         command_list = [
-            _ADB,
+            ADB_EXECUTOR,
             "-s",
             self.__adb.serial,
             "shell",

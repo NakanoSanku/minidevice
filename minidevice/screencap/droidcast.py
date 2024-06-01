@@ -1,15 +1,10 @@
-import os
 import subprocess
 
 import requests
 from adbutils import adb, adb_path
 
-from minidevice.screencap import ScreenCap
-
-WORK_DIR = os.path.dirname(__file__)
-APK_PATH = "{}/bin/DroidCast-debug-1.2.1.apk".format(WORK_DIR)
-APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-1.2.1.apk"
-APK_VERSION = "1.2.1"
+from minidevice.config import DROIDCAST_APK_ANDROID_PATH, DROIDCAST_APK_PATH, DROIDCAST_APK_VERSION
+from minidevice.screencap.screencap import ScreenCap
 
 
 class DroidCast(ScreenCap):
@@ -22,18 +17,18 @@ class DroidCast(ScreenCap):
 
         """
         self.__adb = adb.device(serial)
-        self.__class_path = APK_ANDROID_PATH
+        self.__class_path = DROIDCAST_APK_ANDROID_PATH
         self.__droidcast_session = requests.Session()
         self.__install()
         self.__start()
 
     def __install(self):
         if "com.rayworks.droidcast" not in self.__adb.list_packages():
-            self.__adb.install(APK_PATH, nolaunch=True)
+            self.__adb.install(DROIDCAST_APK_PATH, nolaunch=True)
         else:
-            if self.__adb.package_info("com.rayworks.droidcast")['version_name'] != APK_VERSION:
+            if self.__adb.package_info("com.rayworks.droidcast")['version_name'] != DROIDCAST_APK_VERSION:
                 self.__adb.uninstall("com.rayworks.droidcast")
-                self.__adb.install(APK_PATH, nolaunch=True)
+                self.__adb.install(DROIDCAST_APK_PATH, nolaunch=True)
 
     def __start_droidcast(self):
         out = self.__adb.shell("pm path com.rayworks.droidcast")
