@@ -1,7 +1,6 @@
 import time
 
 from minidevice import config
-from minidevice.utils.logger import logger
 
 
 class CommandBuilder(object):

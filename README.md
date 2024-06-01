@@ -3,50 +3,17 @@
   - 基于windowsapi**DX渲染**实现的基础操作----【**[minidevice-winapidx](https://github.com/NakanoSanku/minidevice/tree/minidevice-winapidx)**】
 # minidevice
 一个对安卓设备(主要是安卓模拟器)进行基础操作的工具包-------基于adb实现
-## 项目结构
-- **Root Directory**
-  - `README.md`
-  - `main.py`
-  - `requirements.txt`
-  - `setup.py`
-
-- **minidevice/**
-  - `__init__.py`
-  - `DroidCast.py`
-  - `QueueUtils.py`
-  - `adbcap.py`
-  - `adbtouch.py`
-  - `device.py`
-  - `logger.py`
-  - `minicap.py`
-  - `minitouch.py`
-  - `maatouch.py`
-  - `screencap.py`
-  - `config.py`
-  - `utils.py`
-  - `touch.py`
-  - **bin/**
-    - `DroidCast-debug-1.1.1.apk`
-    - **minicap/jni/**
-      - *Various `minicap.so` files for different Android versions and architectures*
-    - **minicap/libs/**
-      - *Various `minicap` binaries for different architectures*
-    - **minitouch/libs/**
-      - *Various `minitouch` binaries for different architectures*
-    - `maatouch`
-
-- **tests/**
-  - `test_minidevice.py`
 
 ## 更新日志
+### 2021.6.1
+重构项目结构，统一为pep8风格
 ### 2024.1.26
-更新为3.0版本
 移除pyminitouch依赖，解决minitouch触控方式部分设备旋转屏幕方向后无法使用的问题，加入MaaTouch触控方式，修改部分不符合命名规范的类
-ADBtouch -> ADBTouch
-ADBcap -> ADBCap
-Minicap -> MiniCap
-Minitouch -> MiniTouch
-adbutils 依赖解除版本限制
+- ADBtouch -> ADBTouch
+- ADBcap -> ADBCap
+- Minicap -> MiniCap
+- Minitouch -> MiniTouch
+- adbutils 依赖解除版本限制
 > minitouch无法在安卓13上使用，请使用MaaTouch替代
 ### 2023.12.3 
 屏蔽pyminitouch的日志并在MiniDevice中添加部分日志以及引入tests自动化测试Minidevice相关实例是否正常(测试不代表所有情况) 尝试修复部分bug
@@ -55,7 +22,7 @@ README说明,添加[MiniDevice](./minidevice/device.py)类
 ### 2023.8.10 
 移除opencv库的引用，让用户自行处理截图源数据bytes,以此减少库依赖(opencv，numpy库真的很大且并非所有人都需要)
 ## requirements
-[`pyminitouch`](https://github.com/williamfzc/pyminitouch) `adbutils==1.2.9`
+`adbutils`,`loguru`,`requests`
 ## 安装
 `pip install minidevice`
 ## API文档以及使用说明
@@ -69,12 +36,12 @@ README说明,添加[MiniDevice](./minidevice/device.py)类
 
 整合至MiniDevice类创建对安卓设备操作的对象,引入基础操作锁，防止不合理并发导致的程序错误
 ```
-MiniDevice(self, serial=None, capMethod: Union[ADBtouch, Minicap , DroidCast] = None,
-                 touchMethod: Union[ADBtouch,Minitouch] = None, screenshotTimeout=500)
+MiniDevice(self, serial=None, screenshot_method= None,
+                 touch_method= None, screenshot_timeout=500)
 ```
-`capMethod`|`touchMethod` 为 `ScreenCap` | `Touch` 的**子类或者子类实例**，为None时不创建对应方法
+`screenshot_method`|`touch_method` 为 `ScreenCap` | `Touch` 的**子类或者子类实例**，为None时不创建对应方法
 
-当`capMethod`|`touchMethod`包含子类时，`serial`为必须
+当`screenshot_method`|`touch_method`包含子类时，`serial`为必须
  - screenshot_raw
  - click
  - swipe
@@ -95,39 +62,19 @@ MiniDevice(self, serial=None, capMethod: Union[ADBtouch, Minicap , DroidCast] = 
   - Touch
 ## 已知bug
 - [x] ~~转发端口清理失败~~ (暂时无需清理,所有转发时都会判断端口是否被占用)
-- [ ] pyminitouch库使用系统路径的adb，导致需用户自行安装adb工具并添加到环境变量中
-- [ ] pyminitouch库实现存在潜在问题，主要集中在[~~连接问题~~](a1802889f30ad19db2ef12b391eff3c86b2285ea)以及输入是否合法未进行检查上面
-### Tests
-进行测试前请`pip install pytest`
+- [x] pyminitouch库使用系统路径的adb，导致需用户自行安装adb工具并添加到环境变量中
+- [x] pyminitouch库实现存在潜在问题，主要集中在[~~连接问题~~](a1802889f30ad19db2ef12b391eff3c86b2285ea)以及输入是否合法未进行检查上面
 
-相关使用特性见[pytest](https://pytest.org) 文档
 
-[MiniDevice测试](tests/test_minidevice.py)
-
-修改文件中以下参数以适配不同测试环境以及新方法
-```python
-SERIAL = "emulator-5554"  # 设备ID
-SCREENSHOT_TIMEOUT = 500  # 截图延迟 单位ms
-METHOD_LIST = [
-    # 格式为 (ScreenCap,Touch)
-    # 截图方法
-    (Minicap, None),
-    (DroidCast, None),
-    (ADBcap, None),
-    # 操作方法
-    (None, ADBtouch),
-    (None, Minitouch)
-]
-```
 ## 性能排序
 ### 截图
-Minicap>>DroidCast>>ADBcap
+MiniCap>>DroidCast>>ADBCap
 
 - Minicap截取一张图片时间大概`20~30ms`,当然你可以通过添加参数rate，以获得更加高的速度(但这同时会拉高设备CPU占用)
-- DroidCast截图图片时间大概在`100ms`以内，场景越复杂,时间越长,解决方法未知
-- ADBcap耗时`500ms`甚至更长,稳定性未知
+- DroidCast截图图片时间大概在`50ms`以内，场景越复杂,时间越长,解决方法未知
+- ADBCap耗时`300ms`甚至更长,稳定性未知
 
 ### 触控
-Minitouch>>ADBtouch
-- Minitouch触控效率据说和Windows api几乎相同
-- ADBtouch无法模拟曲线滑动,只能点到点直线
+MiniTouch>>ADBTouch
+- MiniTouch触控效率据说和Windows api几乎相同
+- ADBTouch无法模拟曲线滑动,只能点到点直线
