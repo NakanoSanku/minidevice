@@ -1,23 +1,26 @@
 import subprocess
 
 import requests
-from adbutils import adb, adb_path
+from adbutils import adb
 
-from minidevice.config import DROIDCAST_APK_ANDROID_PATH, DROIDCAST_APK_PATH, DROIDCAST_APK_VERSION
+from minidevice.config import DROIDCAST_APK_ANDROID_PATH, DROIDCAST_APK_PATH, DROIDCAST_APK_VERSION, ADB_EXECUTOR
 from minidevice.screencap.screencap import ScreenCap
+from minidevice.utils.logger import logger
 
 
 class DroidCast(ScreenCap):
-    def __init__(self, serial) -> None:
+    def __init__(self, serial, display_id: int = None) -> None:
         """
         __init__ DroidCast截图方法
 
         Args:
             serial (str): 设备id
+            display_id (int): 显示器id use `adb shell dumpsys SurfaceFlinger --display-id` to get
 
         """
         self.__adb = adb.device(serial)
         self.__class_path = DROIDCAST_APK_ANDROID_PATH
+        self.__display_id = display_id
         self.__droidcast_session = requests.Session()
         self.__install()
         self.__start()
@@ -34,15 +37,12 @@ class DroidCast(ScreenCap):
         out = self.__adb.shell("pm path com.rayworks.droidcast")
         self.__class_path = "CLASSPATH=" + out.split(":")[1]
         start_droidcast_cmd = "exec app_process / com.rayworks.droidcast.Main"
+        adb_command = [ADB_EXECUTOR, "-s", self.__adb.serial, "shell", self.__class_path, start_droidcast_cmd]
+        if self.__display_id:
+            adb_command.extend(["--display_id={}".format(self.__display_id)])
+        logger.info(adb_command)
         self.__droidcast_popen = subprocess.Popen(
-            [
-                adb_path(),
-                "-s",
-                self.__adb.serial,
-                "shell",
-                self.__class_path,
-                start_droidcast_cmd,
-            ],
+            adb_command,
             stderr=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
         )
@@ -55,7 +55,7 @@ class DroidCast(ScreenCap):
         self.__start_droidcast()
         self.__forward_port()
         self.screencap_raw()
-        print("DroidCast启动完成")
+        logger.info("DroidCast启动完成")
 
     def __stop(self):
         if self.__droidcast_popen.poll() is None:
