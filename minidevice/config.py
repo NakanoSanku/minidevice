@@ -32,9 +32,9 @@ MINICAP_START_TIMEOUT = 3
 
 
 # DroidCast
-DROIDCAST_APK_VERSION = "1.2.1"
-DROIDCAST_APK_PATH = "{}/bin/DroidCast-debug-{}.apk".format(WORK_DIR, DROIDCAST_APK_VERSION)
-DROIDCAST_APK_ANDROID_PATH = "/data/local/tmp/DroidCast-debug-{}.apk".format(DROIDCAST_APK_VERSION)
+DROIDCAST_APK_VERSION = "DroidCast_1.3.1"
+DROIDCAST_APK_PATH = "{}/bin/{}.apk".format(WORK_DIR, DROIDCAST_APK_VERSION)
+DROIDCAST_APK_ANDROID_PATH = "/data/local/tmp/{}.apk".format(DROIDCAST_APK_VERSION)
 
 # MiniTouch
 MINITOUCH_PATH = "{}/bin/minitouch/libs".format(WORK_DIR)
