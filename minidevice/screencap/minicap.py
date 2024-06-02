@@ -253,9 +253,7 @@ class MiniCap(ScreenCap):
             else:
                 raise MiniCapUnSupportError("minicap does not support")
             info = json.loads(extracted_json)
-            width = int(self.__adb.shell("dumpsys input|grep SurfaceWidth:").split(": ")[-1][:-2])
-            height = int(self.__adb.shell("dumpsys input|grep SurfaceHeight:").split(": ")[-1][:-2])
-            self.__vm_size = "{}x{}".format(width, height)
+            self.__vm_size = self.__adb.shell("wm size").split(" ")[-1]
             self.__rotation = info.get("rotation")
             self.__rate = info.get("fps") if self.__rate is None else self.__rate
         except Exception as e:
@@ -269,7 +267,7 @@ class MiniCap(ScreenCap):
         """安装minicap"""
         if str(self.__sdk) == "32" and str(self.__abi) == "x86_64":
             self.__abi = "x86"
-        if int(self.__sdk) > 33:
+        if int(self.__sdk) > 34:
             raise MiniCapUnSupportError("minicap does not support Android 12+")
         self.__adb.sync.push(f"{MINICAP_PATH}/{self.__abi}/minicap", MNC_HOME)
         self.__adb.sync.push(
