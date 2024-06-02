@@ -1,8 +1,9 @@
 import time
 import cv2
 import numpy as np
-from minidevice import ScreenCap, Touch
 import ctypes
+
+from minidevice import ScreenCap, Touch
 
 DLL_PATH = "/shell/sdk/external_renderer_ipc.dll"
 
@@ -87,11 +88,12 @@ class MuMuApi:
 
 class MuMuScreenCap(ScreenCap):
     def __init__(
-        self,
-        instanceIndex,
-        emulatorInstallPath: str,
-        dllPath: str = None,
-        displayId: int = 0,
+            self,
+            instanceIndex,
+            emulatorInstallPath: str,
+            dllPath: str = None,
+            displayId: int = 0,
+            encode='.png'
     ):
         """
         __init__ MumuApi 截图
@@ -104,6 +106,9 @@ class MuMuScreenCap(ScreenCap):
             dllPath (str, optional): dll文件存放路径，一般会根据模拟器路径获取. Defaults to None.
             displayId (int, optional): 显示窗口id，一般无需填写. Defaults to 0.
         """
+        self.encode = encode
+        self.height = None
+        self.width = None
         self.displayId = displayId
         self.instanceIndex = instanceIndex
         self.emulatorInstallPath = emulatorInstallPath
@@ -131,14 +136,6 @@ class MuMuScreenCap(ScreenCap):
         self.bufferSize = self.width.value * self.height.value * 4
         # 创建一个足够大的缓冲区来存储像素数据
         self.pixels = (ctypes.c_ubyte * self.bufferSize)()
-        print(
-            self.handle,
-            self.displayId,
-            self.bufferSize,
-            self.width,
-            self.height,
-            self.pixels,
-        )
 
     def screencap_raw(self) -> bytes:
         self.width = ctypes.c_int(self.width.value)
@@ -153,17 +150,14 @@ class MuMuScreenCap(ScreenCap):
         )
         if result > 1:
             raise BufferError("截图错误")
-        inverted_image = np.flipud(
-            cv2.cvtColor(
-                np.ctypeslib.as_array(self.pixels).reshape(
-                    (self.height.value, self.width.value, 4)
-                ),
-                cv2.COLOR_RGBA2BGR,
-            )
-        )
-        _, buffer = cv2.imencode(".jpg", inverted_image)  # 编码为JPEG格式
-        # 转换为bytes
-        return buffer.tobytes()
+        return self.__buffer2bytes()
+
+    def __buffer2bytes(self):
+        # Directly use the pixel buffer and reshape only once
+        pixel_array = np.frombuffer(self.pixels, dtype=np.uint8).reshape((self.height.value, self.width.value, 4))
+        flipped_rgb_pixel_array = pixel_array[::-1, :, [2, 1, 0]]
+        _, data = cv2.imencode(self.encode, flipped_rgb_pixel_array)
+        return data.tobytes()
 
     def __del__(self):
         self.nemu.disconnect(self.handle)
@@ -171,11 +165,11 @@ class MuMuScreenCap(ScreenCap):
 
 class MuMuTouch(Touch):
     def __init__(
-        self,
-        instanceIndex,
-        emulatorInstallPath: str,
-        dllPath: str = None,
-        displayId: int = 0,
+            self,
+            instanceIndex,
+            emulatorInstallPath: str,
+            dllPath: str = None,
+            displayId: int = 0,
     ):
         """
         __init__ MumuApi 操作
@@ -235,15 +229,12 @@ class MuMuTouch(Touch):
 
 
 if __name__ == "__main__":
-    test = MuMuScreenCap(0, "D:\\MuMuPlayer-12.0")
-    # for i in range(5):
+    screen_capture = MuMuScreenCap(0, "D:\\MuMuPlayer-12.0", encode='.jpg')
+    import cProfile
+
+    screen_capture.save_screencap()
+    # cProfile.run("screen_capture.screencap_raw()", sort="cumtime")
+    # for i in range(1):
     #     s = time.time()
-    #     image = test.screencap_raw()
-    #     print((time.time() - s) * 1000)
-    #     cv2.imshow("{}".format(i), image)
-    #     cv2.waitKey()
-    # for i in range(10):
-    #     s = time.time()
-    #     test.screencap_raw()
-    #     print((time.time() - s) * 1000)
-    test.save_screencap()
+    #     screen_capture.save_screencap()
+    #     print((time.time() - s)*1000)
