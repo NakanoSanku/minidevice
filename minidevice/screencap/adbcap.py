@@ -7,7 +7,7 @@ from minidevice.screencap.screencap import ScreenCap
 
 
 class ADBCap(ScreenCap):
-    def __init__(self, serial) -> None:
+    def __init__(self, serial, display_id=None) -> None:
         """
         __init__ ADB 截图方式
 
@@ -15,6 +15,7 @@ class ADBCap(ScreenCap):
             serial (str): 设备id
         """
         self.__adb = adb.device(serial)
+        self.__display_id = display_id
 
     def screencap_raw(self) -> bytes:
         """
@@ -24,6 +25,8 @@ class ADBCap(ScreenCap):
         """
         try:
             adb_command = [ADB_EXECUTOR, "-s", self.__adb.serial, "exec-out", "screencap", "-p"]
+            if self.__display_id:
+                adb_command.extend(["-d", str(self.__display_id)])
             process = subprocess.Popen(
                 adb_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
             )
@@ -32,9 +35,7 @@ class ADBCap(ScreenCap):
             if process.returncode == 0 and data:
                 return data
             else:
-                raise subprocess.TimeoutExpired(
-                    None, timeout=10, stdout=data, stderr=err
-                )
+                raise subprocess.TimeoutExpired(None, timeout=10, stderr=err)
         except subprocess.TimeoutExpired as e:
             raise e
         except Exception as e:
