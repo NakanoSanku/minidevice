@@ -19,7 +19,7 @@ setup(
     include_package_data=True,
     package_data={
         # 如果你的bin文件在minidevice包下，可以这样指定
-        'minidevice': ['bin/*'],
+        'minidevice': ['bin/**/*'],
         # 如果bin文件不在包内，也可以直接指定路径
         # '': ['bin/*'],
     },
