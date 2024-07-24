@@ -1,16 +1,13 @@
+from minidevice import MiniCap
 import time
+m= MiniCap("127.0.0.1:16384",skip_frame=True)
 
-from minidevice import *
-from minidevicemumuapi import *
+for i in range(10):
+    s = time.time()
+    m.screencap_raw()
+    print(f"{(time.time()-s)*1000}ms")
+time.sleep(1)
 
-# MuMuScreenCap(0, r"D:\MuMuPlayer-12.0")
-# 创建一个MiniDevice实例
-# "127.0.0.1:16384"
-# emulator-5554
-a = MiniDevice("127.0.0.1:16384", None, MiniTouch, 0)
-
-
-a.click(200, 100, 5000)
-
-print("helloworld")
-
+s = time.time()
+m.screencap_raw()
+print(f"{(time.time()-s)*1000}ms")

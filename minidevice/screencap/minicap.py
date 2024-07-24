@@ -11,7 +11,6 @@ from minidevice.config import MINICAP_PATH, MINICAPSO_PATH, ADB_EXECUTOR, MNC_HO
     MINICAP_START_TIMEOUT
 from minidevice.screencap.screencap import ScreenCap
 from minidevice.utils.logger import logger
-from minidevice.utils.queue_utils import PipeQueue
 
 
 class Banner:
@@ -65,10 +64,8 @@ class Banner:
 
 
 class MinicapStream:
-    __instance = {}
-    __mutex = threading.Lock()
 
-    def __init__(self, host: str, port: int, queue: PipeQueue):
+    def __init__(self, host: str, port: int):
         self.buffer_size = 4096
         self.__host = host  # socket 主机
         self.__port = port  # socket 端口
@@ -76,20 +73,8 @@ class MinicapStream:
         self.running = False
         self.__pid = 0  # 进程ID
         self.minicapSocket = None
-        self.ReadImageStreamTask = None
-        self.queue = queue  # 图像数据队列
-
-    @staticmethod
-    def getBuilder(host: str, port: int, size=5) -> "MinicapStream":
-        key = f"{host}:{port}"
-        if key not in MinicapStream.__instance:
-            MinicapStream.__mutex.acquire()
-            if key not in MinicapStream.__instance:
-                MinicapStream.__instance[key] = MinicapStream(
-                    host, port, PipeQueue(maxsize=size)
-                )
-            MinicapStream.__mutex.release()
-        return MinicapStream.__instance[key]
+        self.readImageStreamTask = None
+        self.__image_cache = None
 
     def run(self):
         # 开始执行
@@ -98,12 +83,12 @@ class MinicapStream:
         # 定义socket类型，网络通信，TCP
         self.minicapSocket.connect((self.__host, self.__port))
         logger.info(f"connect to {self.__host}:{self.__port}")
-        self.ReadImageStreamTask = threading.Thread(target=self.ReadImageStream)
-        self.ReadImageStreamTask.daemon = True
+        self.readImageStreamTask = threading.Thread(target=self.readImageStream)
+        self.readImageStreamTask.daemon = True
         self.running = True
-        self.ReadImageStreamTask.start()
+        self.readImageStreamTask.start()
 
-    def ReadImageStream(self):
+    def readImageStream(self):
         # 读取图片流到队列
         bannerLength = 24
         readBannerBytes = 0
@@ -166,7 +151,7 @@ class MinicapStream:
                         dataBody = dataBody + chunk[cursor: (cursor + frameBodyLength)]
                         if dataBody[0] != 0xFF or dataBody[1] != 0xD8:
                             return
-                        self.queue.put(dataBody)
+                        self.__image_cache = dataBody
                         cursor += frameBodyLength
                         frameBodyLength = 0
                         readFrameBytes = 0
@@ -177,10 +162,17 @@ class MinicapStream:
                         readFrameBytes += length - cursor
                         cursor = length
 
+    def nextImage(self):
+        while not self.__image_cache:
+            continue
+        image = self.__image_cache
+        self.__image_cache = None
+        return image
+    
     def stop(self):
         self.running = False
-        if self.ReadImageStreamTask:
-            self.ReadImageStreamTask.join()  # 等待读取图像流的线程结束
+        if self.readImageStreamTask:
+            self.readImageStreamTask.join()  # 等待读取图像流的线程结束
         if self.minicapSocket:
             self.minicapSocket.close()  # 关闭 minicap 的 socket 连接
 
@@ -195,7 +187,7 @@ class MiniCap(ScreenCap):
             serial,
             rate=None,
             quality=100,
-            skip_frame=False,
+            skip_frame=True,
             use_stream=True,
     ):
         """
@@ -223,7 +215,7 @@ class MiniCap(ScreenCap):
 
     def screencap_raw(self) -> bytes:
         if self.__use_stream:
-            return self.__screen_queue.get()
+            return self.__minicap_stream.nextImage()
         else:
             return self.__minicap_frame()
 
@@ -300,10 +292,9 @@ class MiniCap(ScreenCap):
         self.minicap_port = self.__adb.forward_port("localabstract:minicap")
 
     def __read_minicap_stream(self):
-        self.__minicap_stream = MinicapStream.getBuilder("127.0.0.1", self.minicap_port)
+        self.__minicap_stream = MinicapStream("127.0.0.1", self.minicap_port)
         self.__minicap_stream.run()
         self.__banner = self.__minicap_stream.banner
-        self.__screen_queue = self.__minicap_stream.queue
 
     def __start_minicap_by_stream(self):
         self.__start_minicap()
