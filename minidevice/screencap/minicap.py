@@ -163,11 +163,10 @@ class MinicapStream:
                         cursor = length
 
     def nextImage(self):
+        #TODO: 修复长时间自旋消耗大量资源的问题
         while not self.__image_cache:
             continue
-        image = self.__image_cache
-        self.__image_cache = None
-        return image
+        return self.__image_cache
     
     def stop(self):
         self.running = False
