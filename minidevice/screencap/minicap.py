@@ -7,7 +7,7 @@ import time
 from adbutils import adb
 
 from minidevice.config import MINICAP_PATH, MINICAPSO_PATH, ADB_EXECUTOR, MNC_HOME, MNC_SO_HOME, MINICAP_COMMAND, \
-    MINICAP_START_TIMEOUT
+    MINICAP_START_TIMEOUT,DEFAULT_HOST
 from minidevice.screencap.screencap import ScreenCap
 from minidevice.utils.logger import logger
 
@@ -139,6 +139,7 @@ class MiniCap(ScreenCap):
             quality=100,
             skip_frame=True,
             use_stream=True,
+            host=DEFAULT_HOST
     ):
         """
         __init__ minicap截图方式
@@ -155,6 +156,7 @@ class MiniCap(ScreenCap):
         self.__use_stream = use_stream
         self.__quality = quality
         self.__rate = rate
+        self.__host = host
         self.__get_device_info()
 
         self.__minicap_kill()
@@ -246,7 +248,7 @@ class MiniCap(ScreenCap):
         self.minicap_port = self.__adb.forward_port("localabstract:minicap")
 
     def __read_minicap_stream(self):
-        self.__minicap_stream = MinicapStream("127.0.0.1", self.minicap_port)
+        self.__minicap_stream = MinicapStream(self.__host, self.minicap_port)
         self.__minicap_stream.start()
 
     def __start_minicap_by_stream(self):
