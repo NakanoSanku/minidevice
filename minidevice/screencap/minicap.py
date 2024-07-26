@@ -56,7 +56,7 @@ class MinicapStream:
             if not chunk:
                 break
 
-            logger.info(f"chunk(length={len(chunk)})", )
+            # logger.info(f"chunk(length={len(chunk)})", )
             cursor = 0
             while cursor < len(chunk):
                 if read_banner_bytes < banner_length:
@@ -92,11 +92,11 @@ class MinicapStream:
                 elif read_frame_bytes < 4:
                     frame_body_length += (chunk[cursor] <<
                                           (read_frame_bytes * 8)) & 0xFFFFFFFF
-                    max_bufsize = frame_body_length
                     cursor += 1
                     read_frame_bytes += 1
-                    logger.info(f"headerbyte{read_frame_bytes}(val={frame_body_length})")
+                    # logger.info(f"headerbyte{read_frame_bytes}(val={frame_body_length})")
                 else:
+                    max_bufsize = frame_body_length
                     if len(chunk) - cursor >= frame_body_length:
                         frame_body.extend(
                             chunk[cursor:cursor + frame_body_length])
