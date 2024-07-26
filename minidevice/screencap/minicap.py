@@ -121,11 +121,10 @@ class MinicapStream:
         self.thread.join()
 
     def nextImage(self):
+        self.data = None
         while not self.data:
             continue
-        image = self.data
-        self.data = None
-        return image
+        return self.data
 
 
 class MiniCapUnSupportError(Exception):
