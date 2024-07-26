@@ -150,6 +150,7 @@ class MiniCap(ScreenCap):
             quality (int, optional): 截图品质1~100之间. Defaults to 100.
             skip_frame(bool,optional): 当无法快速获得截图时，跳过这个帧
             use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
+            host (str, "127.0.0.1"): 链接minicap地址
         """
         self.__adb = adb.device(serial)
         self.__skip_frame = skip_frame
@@ -245,10 +246,10 @@ class MiniCap(ScreenCap):
         return True
 
     def __forward_minicap(self):
-        self.minicap_port = self.__adb.forward_port("localabstract:minicap")
+        self.__port = self.__adb.forward_port("localabstract:minicap")
 
     def __read_minicap_stream(self):
-        self.__minicap_stream = MinicapStream(self.__host, self.minicap_port)
+        self.__minicap_stream = MinicapStream(self.__host, self.__port)
         self.__minicap_stream.start()
 
     def __start_minicap_by_stream(self):
