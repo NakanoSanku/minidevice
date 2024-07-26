@@ -1,6 +1,5 @@
 import json
 import socket
-import struct
 import subprocess
 import threading
 import time
@@ -13,167 +12,120 @@ from minidevice.screencap.screencap import ScreenCap
 from minidevice.utils.logger import logger
 
 
-class Banner:
-    def __init__(self):
-        self.Version = 0  # 版本信息
-        self.Length = 0  # banner长度
-        self.Pid = 0  # 进程ID
-        self.RealWidth = 0  # 设备的真实宽度
-        self.RealHeight = 0  # 设备的真实高度
-        self.VirtualWidth = 0  # 设备的虚拟宽度
-        self.VirtualHeight = 0  # 设备的虚拟高度
-        self.Orientation = 0  # 设备方向
-        self.Quirks = 0  # 设备信息获取策略
-
-    def __str__(self):
-        message = (
-                "Banner [Version="
-                + str(self.Version)
-                + ", length="
-                + str(self.Length)
-                + ", Pid="
-                + str(self.Pid)
-                + ", realWidth="
-                + str(self.RealWidth)
-                + ", realHeight="
-                + str(self.RealHeight)
-                + ", virtualWidth="
-                + str(self.VirtualWidth)
-                + ", virtualHeight="
-                + str(self.VirtualHeight)
-                + ", orientation="
-                + str(self.Orientation)
-                + ", quirks="
-                + str(self.Quirks)
-                + "]"
-        )
-        return message
-
-    def set_of_bytes(self, data):
-        (
-            self.Version,
-            self.Length,
-            self.Pid,
-            self.RealWidth,
-            self.RealHeight,
-            self.VirtualWidth,
-            self.VirtualHeight,
-            self.Orientation,
-            self.Quirks,
-        ) = struct.unpack("<2b5ibB", data)
-
-
 class MinicapStream:
+    def __init__(self, host, port) -> None:
+        self.host = host
+        self.port = port
+        self.data = None
+        self.stop_event = threading.Event()
+        self.thread = threading.Thread(target=self.read_stream, daemon=True)
 
-    def __init__(self, host: str, port: int):
-        self.buffer_size = 4096
-        self.__host = host  # socket 主机
-        self.__port = port  # socket 端口
-        self.banner = Banner()  # 用于存放banner头信息
-        self.running = False
-        self.__pid = 0  # 进程ID
-        self.minicapSocket = None
-        self.readImageStreamTask = None
-        self.__image_cache = None
+    def start(self):
+        try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.connect((self.host, self.port))
+        except ConnectionRefusedError:
+            logger.error(
+                f"Be sure to run `adb forward tcp:{self.port} localabstract:minicap`")
+            return
 
-    def run(self):
-        # 开始执行
-        # 启动socket连接
-        self.minicapSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # 定义socket类型，网络通信，TCP
-        self.minicapSocket.connect((self.__host, self.__port))
-        logger.info(f"connect to {self.__host}:{self.__port}")
-        self.readImageStreamTask = threading.Thread(target=self.readImageStream)
-        self.readImageStreamTask.daemon = True
-        self.running = True
-        self.readImageStreamTask.start()
+        self.thread.start()
 
-    def readImageStream(self):
-        # 读取图片流到队列
-        bannerLength = 24
-        readBannerBytes = 0
+    def read_stream(self):
+        banner = {
+            'version': 0,
+            'length': 0,
+            'pid': 0,
+            'realWidth': 0,
+            'realHeight': 0,
+            'virtualWidth': 0,
+            'virtualHeight': 0,
+            'orientation': 0,
+            'quirks': 0
+        }
 
-        readFrameBytes = 0
-        frameBodyLength = 0
-        dataBody = b""
-        while self.running:
-            chunk = self.minicapSocket.recv(4096)
-            length = len(chunk)
-            if not length:
-                continue
+        read_banner_bytes = 0
+        banner_length = 2
+        read_frame_bytes = 0
+        frame_body_length = 0
+        frame_body = bytearray()
+        max_bufsize = 4096
+
+        while not self.stop_event.is_set():
+            chunk = self.sock.recv(max_bufsize)
+            if not chunk:
+                break
+
+            logger.info(f"chunk(length={len(chunk)})", )
             cursor = 0
-            while cursor < length:
-                # 读取 Banner
-                if readBannerBytes < bannerLength:
-                    if readBannerBytes == 0:
-                        self.banner.Version = chunk[cursor]
-                    elif readBannerBytes == 1:
-                        bannerLength = chunk[cursor]
-                        self.banner.Length = bannerLength
-                    elif readBannerBytes in [2, 3, 4, 5]:
-                        self.banner.Pid += (
-                                                   chunk[cursor] << ((readBannerBytes - 2) * 8)
-                                           ) >> 0
-                    elif readBannerBytes in [6, 7, 8, 9]:
-                        self.banner.RealWidth += (
-                                                         chunk[cursor] << ((readBannerBytes - 6) * 8)
-                                                 ) >> 0
-                    elif readBannerBytes in [10, 11, 12, 13]:
-                        self.banner.RealHeight += (
-                                                          chunk[cursor] << ((readBannerBytes - 10) * 8)
-                                                  ) >> 0
-                    elif readBannerBytes in [14, 15, 16, 17]:
-                        self.banner.VirtualWidth += (
-                                                            chunk[cursor] << ((readBannerBytes - 14) * 8)
-                                                    ) >> 0
-                    elif readBannerBytes in [18, 19, 20, 21]:
-                        self.banner.VirtualHeight += (
-                                                             chunk[cursor] << ((readBannerBytes - 18) * 8)
-                                                     ) >> 0
-                    elif readBannerBytes == 22:
-                        self.banner.Orientation = chunk[cursor] * 90
-                    elif readBannerBytes == 23:
-                        self.banner.Quirks = chunk[cursor]
+            while cursor < len(chunk):
+                if read_banner_bytes < banner_length:
+                    if read_banner_bytes == 0:
+                        banner['version'] = chunk[cursor]
+                    elif read_banner_bytes == 1:
+                        banner['length'] = banner_length = chunk[cursor]
+                    elif 2 <= read_banner_bytes <= 5:
+                        banner['pid'] += (chunk[cursor] <<
+                                          ((read_banner_bytes - 2) * 8)) & 0xFFFFFFFF
+                    elif 6 <= read_banner_bytes <= 9:
+                        banner['realWidth'] += (chunk[cursor] <<
+                                                ((read_banner_bytes - 6) * 8)) & 0xFFFFFFFF
+                    elif 10 <= read_banner_bytes <= 13:
+                        banner['realHeight'] += (chunk[cursor] <<
+                                                 ((read_banner_bytes - 10) * 8)) & 0xFFFFFFFF
+                    elif 14 <= read_banner_bytes <= 17:
+                        banner['virtualWidth'] += (chunk[cursor] <<
+                                                   ((read_banner_bytes - 14) * 8)) & 0xFFFFFFFF
+                    elif 18 <= read_banner_bytes <= 21:
+                        banner['virtualHeight'] += (chunk[cursor] <<
+                                                    ((read_banner_bytes - 18) * 8)) & 0xFFFFFFFF
+                    elif read_banner_bytes == 22:
+                        banner['orientation'] = chunk[cursor] * 90
+                    elif read_banner_bytes == 23:
+                        banner['quirks'] = chunk[cursor]
+
                     cursor += 1
-                    readBannerBytes += 1
-                    if readBannerBytes == bannerLength:
-                        logger.info(self.banner)
-                # 读取图片大小数据
-                elif readFrameBytes < 4:
-                    frameBodyLength = frameBodyLength + (
-                            (chunk[cursor] << (readFrameBytes * 8)) >> 0
-                    )
+                    read_banner_bytes += 1
+
+                    if read_banner_bytes == banner_length:
+                        logger.info(f"banner {banner}",)
+                elif read_frame_bytes < 4:
+                    frame_body_length += (chunk[cursor] <<
+                                          (read_frame_bytes * 8)) & 0xFFFFFFFF
+                    max_bufsize = frame_body_length
                     cursor += 1
-                    readFrameBytes += 1
-                # 读取图片内容
+                    read_frame_bytes += 1
+                    logger.info(f"headerbyte{read_frame_bytes}(val={frame_body_length})")
                 else:
-                    if length - cursor >= frameBodyLength:
-                        dataBody = dataBody + chunk[cursor: (cursor + frameBodyLength)]
-                        if dataBody[0] != 0xFF or dataBody[1] != 0xD8:
+                    if len(chunk) - cursor >= frame_body_length:
+                        frame_body.extend(
+                            chunk[cursor:cursor + frame_body_length])
+                        if frame_body[0] != 0xFF or frame_body[1] != 0xD8:
+                            logger.error(
+                                f"Frame body does not start with JPG header {frame_body}", )
                             return
-                        self.__image_cache = dataBody
-                        cursor += frameBodyLength
-                        frameBodyLength = 0
-                        readFrameBytes = 0
-                        dataBody = b""
+                        self.data = frame_body
+                        cursor += frame_body_length
+                        frame_body_length = read_frame_bytes = 0
+                        frame_body = bytearray()
                     else:
-                        dataBody = dataBody + chunk[cursor:length]
-                        frameBodyLength -= length - cursor
-                        readFrameBytes += length - cursor
-                        cursor = length
+                        frame_body.extend(chunk[cursor:])
+                        frame_body_length -= len(chunk) - cursor
+                        read_frame_bytes += len(chunk) - cursor
+                        cursor = len(chunk)
+
+    def stop(self):
+        logger.info("Stopping the stream")
+        self.stop_event.set()
+        self.sock.close()
+        self.thread.join()
 
     def nextImage(self):
-        #TODO: 修复长时间自旋消耗大量资源的问题
-        while not self.__image_cache:
+        while not self.data:
             continue
-        return self.__image_cache
-    
-    def stop(self):
-        self.running = False
-        if self.readImageStreamTask:
-            self.readImageStreamTask.join()  # 等待读取图像流的线程结束
-        if self.minicapSocket:
-            self.minicapSocket.close()  # 关闭 minicap 的 socket 连接
+        image = self.data
+        self.data = None
+        return image
 
 
 class MiniCapUnSupportError(Exception):
@@ -220,7 +172,8 @@ class MiniCap(ScreenCap):
 
     def __minicap_frame(self):
         adb_command = MINICAP_COMMAND+[]
-        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/{self.__rotation}"])
+        adb_command.extend(
+            ["-P", f"{self.__vm_size}@{self.__vm_size}/{self.__rotation}"])
         adb_command.extend(["-Q", str(self.__quality)])
         adb_command.extend(["-s"])
         raw_data = self.__adb.shell(adb_command, encoding=None)
@@ -246,7 +199,8 @@ class MiniCap(ScreenCap):
             info = json.loads(extracted_json)
             self.__vm_size = self.__adb.shell("wm size").split(" ")[-1]
             self.__rotation = info.get("rotation")
-            self.__rate = info.get("fps") if self.__rate is None else self.__rate
+            self.__rate = info.get(
+                "fps") if self.__rate is None else self.__rate
         except Exception as e:
             raise MiniCapUnSupportError("minicap does not support")
 
@@ -272,7 +226,8 @@ class MiniCap(ScreenCap):
             adb_command.extend(["-s", self.__adb.serial])
         adb_command.extend(["shell"])
         adb_command.extend(MINICAP_COMMAND)
-        adb_command.extend(["-P", f"{self.__vm_size}@{self.__vm_size}/{self.__rotation}"])
+        adb_command.extend(
+            ["-P", f"{self.__vm_size}@{self.__vm_size}/{self.__rotation}"])
         adb_command.extend(["-Q", str(self.__quality)])
         adb_command.extend(["-r", str(self.__rate)])
         if self.__skip_frame:
@@ -283,7 +238,8 @@ class MiniCap(ScreenCap):
         )
         logger.info("minicap connection takes a long time, please be patient.")
         for i in range(MINICAP_START_TIMEOUT):
-            logger.info("minicap starting by {}s".format(MINICAP_START_TIMEOUT - i))
+            logger.info("minicap starting by {}s".format(
+                MINICAP_START_TIMEOUT - i))
             time.sleep(1)
         return True
 
@@ -292,8 +248,7 @@ class MiniCap(ScreenCap):
 
     def __read_minicap_stream(self):
         self.__minicap_stream = MinicapStream("127.0.0.1", self.minicap_port)
-        self.__minicap_stream.run()
-        self.__banner = self.__minicap_stream.banner
+        self.__minicap_stream.start()
 
     def __start_minicap_by_stream(self):
         self.__start_minicap()
