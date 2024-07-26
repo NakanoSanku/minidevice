@@ -1,11 +1,4 @@
-import time
-import cv2
-import numpy as np
 import ctypes
-
-from minidevice import ScreenCap, Touch
-
-DLL_PATH = "/shell/sdk/external_renderer_ipc.dll"
 
 
 class MuMuApi:
@@ -43,7 +36,8 @@ class MuMuApi:
         ]
 
         self.nemu.nemu_input_event_touch_up.restype = ctypes.c_int
-        self.nemu.nemu_input_event_touch_up.argtypes = [ctypes.c_int, ctypes.c_int]
+        self.nemu.nemu_input_event_touch_up.argtypes = [
+            ctypes.c_int, ctypes.c_int]
 
         self.nemu.nemu_input_event_key_down.restype = ctypes.c_int
         self.nemu.nemu_input_event_key_down.argtypes = [
@@ -84,157 +78,3 @@ class MuMuApi:
 
     def inputEventKeyUp(self, handle, displayId, keyCode):
         return self.nemu.nemu_input_event_key_up(handle, displayId, keyCode)
-
-
-class MuMuScreenCap(ScreenCap):
-    def __init__(
-            self,
-            instanceIndex,
-            emulatorInstallPath: str,
-            dllPath: str = None,
-            displayId: int = 0,
-            encode='.png'
-    ):
-        """
-        __init__ MumuApi 截图
-
-        基于/shell/sdk/external_renderer_ipc.dll实现截图mumu模拟器
-
-        Args:
-            instanceIndex (int): 模拟器实例的编号
-            emulatorInstallPath (str): 模拟器安装路径
-            dllPath (str, optional): dll文件存放路径，一般会根据模拟器路径获取. Defaults to None.
-            displayId (int, optional): 显示窗口id，一般无需填写. Defaults to 0.
-        """
-        self.encode = encode
-        self.height = None
-        self.width = None
-        self.displayId = displayId
-        self.instanceIndex = instanceIndex
-        self.emulatorInstallPath = emulatorInstallPath
-        self.dllPath = emulatorInstallPath + DLL_PATH if dllPath is None else dllPath
-        self.nemu = MuMuApi(self.dllPath)
-        # 连接模拟器
-        self.handle = self.nemu.connect(self.emulatorInstallPath, self.instanceIndex)
-        self.__getDisplayInfo()
-
-    def __getDisplayInfo(self):
-        self.width = ctypes.c_int(0)
-        self.height = ctypes.c_int(0)
-        result = self.nemu.captureDisplay(
-            self.handle,
-            self.displayId,
-            0,
-            ctypes.byref(self.width),
-            ctypes.byref(self.height),
-            None,
-        )
-        if result != 0:
-            print("Failed to get the display size.")
-            return None
-        # 根据宽度和高度计算缓冲区大小
-        self.bufferSize = self.width.value * self.height.value * 4
-        # 创建一个足够大的缓冲区来存储像素数据
-        self.pixels = (ctypes.c_ubyte * self.bufferSize)()
-
-    def screencap_raw(self) -> bytes:
-        self.width = ctypes.c_int(self.width.value)
-        self.height = ctypes.c_int(self.height.value)
-        result = self.nemu.captureDisplay(
-            self.handle,
-            self.displayId,
-            self.bufferSize,
-            self.width,
-            self.height,
-            self.pixels,
-        )
-        if result > 1:
-            raise BufferError("截图错误")
-        return self.__buffer2bytes()
-
-    def __buffer2bytes(self):
-        # Directly use the pixel buffer and reshape only once
-        pixel_array = np.frombuffer(self.pixels, dtype=np.uint8).reshape((self.height.value, self.width.value, 4))
-        flipped_rgb_pixel_array = pixel_array[::-1, :, [2, 1, 0]]
-        _, data = cv2.imencode(self.encode, flipped_rgb_pixel_array)
-        return data.tobytes()
-
-    def __del__(self):
-        self.nemu.disconnect(self.handle)
-
-
-class MuMuTouch(Touch):
-    def __init__(
-            self,
-            instanceIndex,
-            emulatorInstallPath: str,
-            dllPath: str = None,
-            displayId: int = 0,
-    ):
-        """
-        __init__ MumuApi 操作
-
-        基于/shell/sdk/external_renderer_ipc.dll实现操作mumu模拟器
-
-        Args:
-            instanceIndex (int): 模拟器实例的编号
-            emulatorInstallPath (str): 模拟器安装路径
-            dllPath (str, optional): dll文件存放路径，一般会根据模拟器路径获取. Defaults to None.
-            displayId (int, optional): 显示窗口id，一般无需填写. Defaults to 0.
-        """
-        self.displayId = displayId
-        self.instanceIndex = instanceIndex
-        self.emulatorInstallPath = emulatorInstallPath
-        self.dllPath = emulatorInstallPath + DLL_PATH if dllPath is None else dllPath
-        self.nemu = MuMuApi(self.dllPath)
-        # 连接模拟器
-        self.handle = self.nemu.connect(self.emulatorInstallPath, self.instanceIndex)
-        self.__getDisplayInfo()
-
-    def __getDisplayInfo(self):
-        self.width = ctypes.c_int(0)
-        self.height = ctypes.c_int(0)
-        result = self.nemu.captureDisplay(
-            self.handle,
-            self.displayId,
-            0,
-            ctypes.byref(self.width),
-            ctypes.byref(self.height),
-            None,
-        )
-        if result != 0:
-            print("Failed to get the display size.")
-            return None
-
-    def click(self, x: int, y: int, duration: int = 100):
-        x, y = self.xyChange(x, y)
-        self.nemu.inputEventTouchDown(self.handle, self.displayId, x, y)
-        time.sleep(duration / 1000)
-        self.nemu.inputEventTouchUp(self.handle, self.displayId)
-
-    def swipe(self, points: list, duration: int = 300):
-        for point in points:
-            x, y = self.xyChange(point[0], point[1])
-            self.nemu.inputEventTouchDown(self.handle, self.displayId, x, y)
-            time.sleep(duration / len(points) / 1000)
-        self.nemu.inputEventTouchUp(self.handle, self.displayId)
-
-    def xyChange(self, x, y):
-        x, y = int(x), int(y)
-        x, y = self.height.value - y, x
-        return x, y
-
-    def __del__(self):
-        self.nemu.disconnect(self.handle)
-
-
-if __name__ == "__main__":
-    screen_capture = MuMuScreenCap(0, "D:\\MuMuPlayer-12.0", encode='.jpg')
-    import cProfile
-
-    screen_capture.save_screencap()
-    # cProfile.run("screen_capture.screencap_raw()", sort="cumtime")
-    # for i in range(1):
-    #     s = time.time()
-    #     screen_capture.save_screencap()
-    #     print((time.time() - s)*1000)
