@@ -7,18 +7,19 @@ import time
 from adbutils import adb
 
 from minidevice.config import MINICAP_PATH, MINICAPSO_PATH, ADB_EXECUTOR, MNC_HOME, MNC_SO_HOME, MINICAP_COMMAND, \
-    MINICAP_START_TIMEOUT,DEFAULT_HOST
+    MINICAP_START_TIMEOUT, DEFAULT_HOST
 from minidevice.screencap.screencap import ScreenCap
 from minidevice.utils.logger import logger
 
 
 class MinicapStream:
-    def __init__(self, host, port) -> None:
+    def __init__(self, host, port, timeout=None) -> None:
         self.host = host
         self.port = port
         self.data = None
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self.read_stream, daemon=True)
+        self.timeout = timeout
 
     def start(self):
         try:
@@ -121,9 +122,28 @@ class MinicapStream:
         self.thread.join()
 
     def nextImage(self):
-        self.data = None
+        self.cache = self.data  # 将上一张图像数据缓存下来
+        self.data = None  # 将当前图像数据设为None
+        self.use_cache = False  # 默认不采用缓存
+
+        def timeout():
+            logger.debug("minicap 获取图像超时，返回缓存图像")
+            self.use_cache = True
+
+        # 如果self.timeout = None 代表永远不使用缓存
+        if self.timeout is not None:
+            timeout_thread = threading.Timer(self.timeout/1000, timeout)
+            timeout_thread.start()
+
         while not self.data:
+            # 自旋直到使用缓存或者当前图像数据已获取成功
+            if self.use_cache:
+                self.data = self.cache
+                return self.data
             continue
+
+        if self.timeout is not None:
+            timeout_thread.cancel()  # 取消定时器
         return self.data
 
 
@@ -139,7 +159,8 @@ class MiniCap(ScreenCap):
             quality=100,
             skip_frame=True,
             use_stream=True,
-            host=DEFAULT_HOST
+            host=DEFAULT_HOST,
+            timeout=100
     ):
         """
         __init__ minicap截图方式
@@ -151,6 +172,7 @@ class MiniCap(ScreenCap):
             skip_frame(bool,optional): 当无法快速获得截图时，跳过这个帧
             use_stream (bool, optional): 是否使用stream的方式. Defaults to True.
             host (str, "127.0.0.1"): 链接minicap地址
+            timeout (int, optional): 获取截图的超时时间. Defaults to 100ms. 设置成None表示永远不是使用缓存
         """
         self.__adb = adb.device(serial)
         self.__skip_frame = skip_frame
@@ -158,6 +180,7 @@ class MiniCap(ScreenCap):
         self.__quality = quality
         self.__rate = rate
         self.__host = host
+        self.__timeout = timeout
         self.__get_device_info()
 
         self.__minicap_kill()
@@ -249,7 +272,8 @@ class MiniCap(ScreenCap):
         self.__port = self.__adb.forward_port("localabstract:minicap")
 
     def __read_minicap_stream(self):
-        self.__minicap_stream = MinicapStream(self.__host, self.__port)
+        self.__minicap_stream = MinicapStream(
+            self.__host, self.__port, self.__timeout)
         self.__minicap_stream.start()
 
     def __start_minicap_by_stream(self):
